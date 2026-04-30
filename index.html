@@ -120,7 +120,7 @@ async function init() {
     const data = await res.json();
     allPosts = data.posts || [];
     document.getElementById("subtitle").textContent =
-      "Auto-updated daily \u00b7 Last updated " + (data.updated || "recently");
+      "Auto-updated hourly" \u00b7 Last updated " + (data.updated || "recently");
     document.getElementById("controls").style.display = "flex";
     populateGenres(allPosts);
     filter();
