@@ -1,467 +1,317 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earmilk Hourly Feed</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
-  .container { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
-  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  h1 { font-size: 24px; font-weight: 600; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1DB954; flex-shrink: 0; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
-  .controls { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
-  input[type=text], select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fff; color: #1a1a1a; outline: none; }
-  input[type=text]:focus, select:focus { border-color: #aaa; }
-  input[type=text] { flex: 1; min-width: 160px; }
-  select { min-width: 130px; }
-  .badge { font-size: 13px; color: #888; margin-left: auto; white-space: nowrap; }
-  .list { display: flex; flex-direction: column; gap: 8px; }
-  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
-  .card:hover { border-color: #bbb; }
-  .num { font-size: 12px; color: #bbb; min-width: 22px; text-align: right; flex-shrink: 0; }
-  .artwork { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
-  .artwork-placeholder { width: 48px; height: 48px; border-radius: 8px; background: #e8e8e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .info { flex: 1; min-width: 0; }
-  .song { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .artist { font-size: 13px; color: #666; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .meta { display: flex; align-items: center; gap: 7px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
-  .date { font-size: 11px; color: #bbb; white-space: nowrap; }
-  .pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; white-space: nowrap; font-weight: 500; }
-  .g-indie      { background: #e8f5e9; color: #2e7d32; }
-  .g-hiphop     { background: #fff8e1; color: #f57f17; }
-  .g-electronic { background: #e3f2fd; color: #1565c0; }
-  .g-folk       { background: #f1f8e9; color: #558b2f; }
-  .g-rock       { background: #fff3e0; color: #e65100; }
-  .g-pop        { background: #fce4ec; color: #880e4f; }
-  .g-rnb        { background: #f3e5f5; color: #6a1b9a; }
-  .g-default    { background: #f5f5f5; color: #555; }
-  a.btn { font-size: 12px; padding: 5px 12px; border-radius: 8px; border: 1px solid #1DB954; background: transparent; color: #1DB954; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
-  a.btn:hover { background: #f0faf3; }
-  .status { font-size: 14px; color: #888; padding: 3rem 0; text-align: center; }
-  .error { color: #c0392b; }
-  @media (max-width: 520px) { .date, .pill { display: none; } .card { padding: 10px 12px; } .artwork, .artwork-placeholder { width: 40px; height: 40px; } }
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header"><span class="dot"></span><h1>Earmilk Hourly Feed</h1></div>
-  <p class="subtitle" id="subtitle">Loading feed...</p>
-  <div class="controls" id="controls" style="display:none">
-    <input type="text" id="search" placeholder="Search artist or song..." oninput="filter()">
-    <select id="gf" onchange="filter()"><option value="">All genres</option></select>
-    <span class="badge" id="badge"></span>
-  </div>
-  <div class="list" id="list"><p class="status">Fetching latest posts...</p></div>
-</div>
-
-<script>
-const playIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
-const musicIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="#ccc"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>`;
-let allPosts = [];
-
-function gc(g) {
-  const l = (g || "").toLowerCase();
-  if (l.includes("hip") || l.includes("rap")) return "g-hiphop";
-  if (l.includes("electro") || l.includes("house") || l.includes("dance") || l.includes("ambient")) return "g-electronic";
-  if (l.includes("folk") || l.includes("americana") || l.includes("country")) return "g-folk";
-  if (l.includes("rock") || l.includes("alt")) return "g-rock";
-  if (l.includes("r&b") || l.includes("soul") || l.includes("jazz")) return "g-rnb";
-  if (l.includes("pop")) return "g-pop";
-  if (l.includes("indie")) return "g-indie";
-  return "g-default";
+{
+  "updated": "Apr 29, 2026",
+  "posts": [
+    {
+      "artist": "Anna Blaise",
+      "song": "We'll Be King",
+      "genre": "Alt-Pop",
+      "date": "Apr 29",
+      "url": "https://earmilk.com/2026/04/29/anna-blaise-shares-an-ethereal-and-raw-new-single-well-be-king/",
+      "artwork": ""
+    },
+    {
+      "artist": "Jody Glenham",
+      "song": "Love Deficiency Syndrome",
+      "genre": "Indie",
+      "date": "Apr 29",
+      "url": "https://earmilk.com/2026/04/29/jody-glenham-dives-into-post-breakup-reset-on-love-deficiency-syndrome/",
+      "artwork": ""
+    },
+    {
+      "artist": "Max Nemo",
+      "song": "Nexus",
+      "genre": "Indie",
+      "date": "Apr 29",
+      "url": "https://earmilk.com/2026/04/29/max-nemo-shares-powerful-ethereal-and-emotive-new-album-nexus/",
+      "artwork": ""
+    },
+    {
+      "artist": "Max Norton",
+      "song": "Buffalo Stampede",
+      "genre": "Indie Rock",
+      "date": "Apr 29",
+      "url": "https://earmilk.com/2026/04/29/max-nortons-buffalo-stampede-is-a-gritty-return-to-the-american-west/",
+      "artwork": ""
+    },
+    {
+      "artist": "Haunted Images",
+      "song": "I'll Come Around",
+      "genre": "Rock",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/haunted-images-releases-new-single-ill-come-around/",
+      "artwork": ""
+    },
+    {
+      "artist": "Belle Blue",
+      "song": "Wash",
+      "genre": "Rock",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/belle-blue-wash/",
+      "artwork": ""
+    },
+    {
+      "artist": "Peppermint Heaven",
+      "song": "A.I. (The Remixes)",
+      "genre": "House",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/peppermint-heaven-explore-the-future-of-human-existence-with-new-remix-ep-a-i/",
+      "artwork": ""
+    },
+    {
+      "artist": "Reza Safinia",
+      "song": "Watching From...",
+      "genre": "Electronic",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/reza-safinia/",
+      "artwork": ""
+    },
+    {
+      "artist": "Sharkswimmer",
+      "song": "Meticulous Reach",
+      "genre": "Alt Rock",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/sharkswimmer/",
+      "artwork": ""
+    },
+    {
+      "artist": "Michael John Ahern",
+      "song": "Heart Shaped World",
+      "genre": "Indie",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/michael-john-ahern/",
+      "artwork": ""
+    },
+    {
+      "artist": "Mat Hunsley",
+      "song": "The Things We Need",
+      "genre": "Folk",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/mat-hunsley/",
+      "artwork": ""
+    },
+    {
+      "artist": "Matthew Quinn",
+      "song": "Auckland Trails",
+      "genre": "Indie",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/matthew-quinn/",
+      "artwork": ""
+    },
+    {
+      "artist": "Kiki Kramer",
+      "song": "dionysus",
+      "genre": "Indie Pop",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/kiki-kramer/",
+      "artwork": ""
+    },
+    {
+      "artist": "Blake Madison",
+      "song": "Wait My Dear",
+      "genre": "Pop",
+      "date": "Apr 28",
+      "url": "https://earmilk.com/2026/04/28/blake-madison/",
+      "artwork": ""
+    },
+    {
+      "artist": "SMIC",
+      "song": "Loge",
+      "genre": "Indie",
+      "date": "Apr 27",
+      "url": "https://earmilk.com/2026/04/27/smic-moves-forward-with-loge-album/",
+      "artwork": ""
+    },
+    {
+      "artist": "M4TR",
+      "song": "Reimagination: The Remixes Vol. 1",
+      "genre": "Art Pop",
+      "date": "Apr 27",
+      "url": "https://earmilk.com/2026/04/27/m4tr-rebuilds-emotion-and-sound-on-reimagination-the-remixes-vol-1-album/",
+      "artwork": ""
+    },
+    {
+      "artist": "InteliDey",
+      "song": "Offline",
+      "genre": "Electronic",
+      "date": "Apr 24",
+      "url": "https://earmilk.com/2026/04/24/intelidey-explores-the-connection-between-technology-humanity-and-music-on-offline/",
+      "artwork": ""
+    },
+    {
+      "artist": "Crys Matthews",
+      "song": "Last Night I Had the Strangest Dream",
+      "genre": "Americana",
+      "date": "Apr 24",
+      "url": "https://earmilk.com/2026/04/24/crys-matthews-shares-important-double-single-release-last-night-i-had-the-strangest-dream-and-citizen/",
+      "artwork": ""
+    },
+    {
+      "artist": "Foam & Sand",
+      "song": "Circle 61",
+      "genre": "Electronic",
+      "date": "Apr 21",
+      "url": "https://earmilk.com/2026/04/21/foam-sand-shares-a-new-single-which-re-thinks-the-value-of-music-neuro-science/",
+      "artwork": ""
+    },
+    {
+      "artist": "Alexia Rev",
+      "song": "Love's a Dying Art",
+      "genre": "Alt-Pop",
+      "date": "Apr 17",
+      "url": "https://earmilk.com/2026/04/17/alexia-rev-releases-new-single-loves-a-dying-art/",
+      "artwork": ""
+    },
+    {
+      "artist": "Evan Fong",
+      "song": "pesos",
+      "genre": "Indie Pop",
+      "date": "Mar 31",
+      "url": "https://earmilk.com/2026/03/31/evan-fong-slingshots-us-into-a-new-creative-era-with-pesos/",
+      "artwork": ""
+    },
+    {
+      "artist": "HEESU",
+      "song": "SOMETHING BEAUTIFUL",
+      "genre": "Dance Pop",
+      "date": "Mar 31",
+      "url": "https://earmilk.com/2026/03/31/heesu-hosts-a-dance-party-for-something-beautiful-music-video/",
+      "artwork": ""
+    },
+    {
+      "artist": "Brooklyn Funk Essentials",
+      "song": "Black Butterfly",
+      "genre": "R&B",
+      "date": "Mar 27",
+      "url": "https://earmilk.com/2026/03/27/jam-music-collective-brooklyn-funk-essentials-shares-new-single-black-butterfly/",
+      "artwork": ""
+    },
+    {
+      "artist": "L3TA",
+      "song": "Euphoria",
+      "genre": "House",
+      "date": "Mar 24",
+      "url": "https://earmilk.com/2026/03/24/l3ta-shares-energizing-new-single-euphoria/",
+      "artwork": ""
+    },
+    {
+      "artist": "Youth Valley",
+      "song": "Cerberus",
+      "genre": "Indie Rock",
+      "date": "Mar 13",
+      "url": "https://earmilk.com/music/",
+      "artwork": ""
+    },
+    {
+      "artist": "Deakxn",
+      "song": "LOOK AT YA MANZ",
+      "genre": "Hip-Hop",
+      "date": "Mar 13",
+      "url": "https://earmilk.com/music/",
+      "artwork": ""
+    },
+    {
+      "artist": "Hailey Picardi",
+      "song": "teach you to love me",
+      "genre": "Indie",
+      "date": "Mar 13",
+      "url": "https://earmilk.com/music/",
+      "artwork": ""
+    },
+    {
+      "artist": "Live In Lover",
+      "song": "Nothing At All",
+      "genre": "Electronic",
+      "date": "Mar 13",
+      "url": "https://earmilk.com/music/",
+      "artwork": ""
+    },
+    {
+      "artist": "Thomas O'Shea",
+      "song": "Insane (Now You Know)",
+      "genre": "Indie",
+      "date": "Mar 13",
+      "url": "https://earmilk.com/music/",
+      "artwork": ""
+    },
+    {
+      "artist": "Stereo Silence",
+      "song": "I'll Do Anything",
+      "genre": "Rock",
+      "date": "Mar 4",
+      "url": "https://earmilk.com/2026/03/04/stereo-silence-shares-a-raw-passion-on-explosive-new-single-ill-do-anything/",
+      "artwork": ""
+    },
+    {
+      "artist": "Heddy Edwards",
+      "song": "Cinematic Vision",
+      "genre": "Alt-Pop",
+      "date": "Mar 2",
+      "url": "https://earmilk.com/2026/03/02/heddy-edwards-marks-a-triumphant-return-with-new-single-cinematic-vision/",
+      "artwork": ""
+    },
+    {
+      "artist": "Mitch Allen",
+      "song": "Love That For You",
+      "genre": "Jazz",
+      "date": "Feb 25",
+      "url": "https://earmilk.com/2026/02/25/returning-to-music-mitch-allen-release-jazz-infused-single-love-that-for-you/",
+      "artwork": ""
+    },
+    {
+      "artist": "CAPYAC & Lando Chill",
+      "song": "Rye Bread",
+      "genre": "Hip-Hop",
+      "date": "Feb 25",
+      "url": "https://earmilk.com/2026/02/25/capyac-lando-chill-deliver-groove-and-playful-storytelling-in-rye-bread-music-video/",
+      "artwork": ""
+    },
+    {
+      "artist": "Avery Laird",
+      "song": "Let Down",
+      "genre": "Indie Rock",
+      "date": "Feb 19",
+      "url": "https://earmilk.com/2026/02/19/avery-laird-channels-indie-rock-heartache-in-stunning-new-single-let-down/",
+      "artwork": ""
+    },
+    {
+      "artist": "AMBER",
+      "song": "St Tropez",
+      "genre": "Indie Pop",
+      "date": "Feb 18",
+      "url": "https://earmilk.com/2026/02/18/amber-makes-a-confident-first-impression-with-debut-single-st-tropez/",
+      "artwork": ""
+    },
+    {
+      "artist": "Martron",
+      "song": "Tonight",
+      "genre": "Indie",
+      "date": "Feb 16",
+      "url": "https://earmilk.com/2026/02/16/martron-shares-the-moment-with-tonight-a-bold-step-forward-after-resurgence/",
+      "artwork": ""
+    },
+    {
+      "artist": "Cormac",
+      "song": "Defenceless",
+      "genre": "Pop",
+      "date": "Jan 20",
+      "url": "https://earmilk.com/2026/01/20/cormac-steps-into-a-new-era-with-honest-new-single-defenceless/",
+      "artwork": ""
+    },
+    {
+      "artist": "superstar",
+      "song": "daredevil",
+      "genre": "Indie Rock",
+      "date": "Jan 14",
+      "url": "https://earmilk.com/2026/01/14/you-wont-believe-that-daredevil-is-only-superstars-second-single/",
+      "artwork": ""
+    },
+    {
+      "artist": "Jill Scott",
+      "song": "Beautiful People",
+      "genre": "R&B",
+      "date": "Jan 2",
+      "url": "https://earmilk.com/2026/01/02/jill-scott-returns-with-album-announcement-new-single-beautiful-people/",
+      "artwork": ""
+    }
+  ]
 }
-
-function esc(s) {
-  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function spotifySearch(a, s) {
-  return "https://open.spotify.com/search/" + encodeURIComponent((a ? a + " " : "") + s);
-}
-
-function populateGenres(posts) {
-  const sel = document.getElementById("gf");
-  while (sel.options.length > 1) sel.remove(1);
-  [...new Set(posts.map(p => p.genre).filter(Boolean))].sort().forEach(g => {
-    const o = document.createElement("option"); o.value = g; o.textContent = g; sel.appendChild(o);
-  });
-}
-
-function filter() {
-  const q = document.getElementById("search").value.toLowerCase();
-  const g = document.getElementById("gf").value;
-  const res = allPosts.filter(p => {
-    const mq = !q || (p.artist||"").toLowerCase().includes(q) || p.song.toLowerCase().includes(q) || (p.genre||"").toLowerCase().includes(q);
-    return mq && (!g || p.genre === g);
-  });
-  document.getElementById("badge").textContent = res.length + " posts";
-  const list = document.getElementById("list");
-  if (!res.length) { list.innerHTML = "<p class=\"status\">No results found.</p>"; return; }
-  list.innerHTML = res.map((p, i) => {
-    const art = p.artwork
-      ? `<img class="artwork" src="${esc(p.artwork)}" alt="" loading="lazy">`
-      : `<div class="artwork-placeholder">${musicIcon}</div>`;
-    return `<div class="card">
-      <span class="num">${i + 1}</span>
-      ${art}
-      <div class="info">
-        <div class="song">${esc(p.song)}</div>
-        <div class="artist">${esc(p.artist || "")}</div>
-      </div>
-      <div class="meta">
-        <span class="date">${esc(p.date || "")}</span>
-        ${p.genre ? `<span class="pill ${gc(p.genre)}">${esc(p.genre)}</span>` : ""}
-        <a class="btn" href="${esc(spotifySearch(p.artist, p.song))}" target="_blank" rel="noopener">${playIcon} Play</a>
-      </div>
-    </div>`;
-  }).join("");
-}
-
-async function init() {
-  try {
-    const res = await fetch("posts.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    allPosts = data.posts || [];
-    document.getElementById("subtitle").textContent =
-      "Auto-updated hourly \u00b7 Last updated " + (data.updated || "recently");
-    document.getElementById("controls").style.display = "flex";
-    populateGenres(allPosts);
-    filter();
-  } catch (e) {
-    document.getElementById("subtitle").textContent = "Earmilk Hourly Feed";
-    document.getElementById("list").innerHTML =
-      "<p class=\"status error\">Could not load posts.json \u2014 " + e.message + "</p>";
-  }
-}
-
-init();
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earmilk Hourly Feed</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
-  .container { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
-  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  h1 { font-size: 24px; font-weight: 600; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1DB954; flex-shrink: 0; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
-  .controls { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
-  input[type=text], select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fff; color: #1a1a1a; outline: none; }
-  input[type=text]:focus, select:focus { border-color: #aaa; }
-  input[type=text] { flex: 1; min-width: 160px; }
-  select { min-width: 130px; }
-  .badge { font-size: 13px; color: #888; margin-left: auto; white-space: nowrap; }
-  .list { display: flex; flex-direction: column; gap: 8px; }
-  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
-  .card:hover { border-color: #bbb; }
-  .num { font-size: 12px; color: #bbb; min-width: 22px; text-align: right; flex-shrink: 0; }
-  .artwork { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; }
-  .artwork-placeholder { width: 48px; height: 48px; border-radius: 8px; background: #e8e8e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-  .artwork-placeholder svg { opacity: 0.3; }
-  .info { flex: 1; min-width: 0; }
-  .song { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .artist { font-size: 13px; color: #666; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .meta { display: flex; align-items: center; gap: 7px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
-  .date { font-size: 11px; color: #bbb; white-space: nowrap; }
-  .pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; white-space: nowrap; font-weight: 500; }
-  .g-indie      { background: #e8f5e9; color: #2e7d32; }
-  .g-hiphop     { background: #fff8e1; color: #f57f17; }
-  .g-electronic { background: #e3f2fd; color: #1565c0; }
-  .g-folk       { background: #f1f8e9; color: #558b2f; }
-  .g-rock       { background: #fff3e0; color: #e65100; }
-  .g-pop        { background: #fce4ec; color: #880e4f; }
-  .g-rnb        { background: #f3e5f5; color: #6a1b9a; }
-  .g-default    { background: #f5f5f5; color: #555; }
-  a.btn { font-size: 12px; padding: 5px 12px; border-radius: 8px; border: 1px solid #1DB954; background: transparent; color: #1DB954; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
-  a.btn:hover { background: #f0faf3; }
-  .status { font-size: 14px; color: #888; padding: 3rem 0; text-align: center; }
-  .error { color: #c0392b; }
-  @media (max-width: 520px) { .date, .pill { display: none; } .card { padding: 10px 12px; } .artwork, .artwork-placeholder { width: 40px; height: 40px; } }
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header"><span class="dot"></span><h1>Earmilk Hourly Feed</h1></div>
-  <p class="subtitle" id="subtitle">Loading feed...</p>
-  <div class="controls" id="controls" style="display:none">
-    <input type="text" id="search" placeholder="Search artist or song..." oninput="filter()">
-    <select id="gf" onchange="filter()"><option value="">All genres</option></select>
-    <span class="badge" id="badge"></span>
-  </div>
-  <div class="list" id="list"><p class="status">Fetching latest posts...</p></div>
-</div>
-
-<script>
-const playIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
-const musicIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>`;
-
-let allPosts = [];
-const artCache = {};
-
-function gc(g) {
-  const l = (g || "").toLowerCase();
-  if (l.includes("hip") || l.includes("rap")) return "g-hiphop";
-  if (l.includes("electro") || l.includes("house") || l.includes("dance") || l.includes("ambient")) return "g-electronic";
-  if (l.includes("folk") || l.includes("americana") || l.includes("country")) return "g-folk";
-  if (l.includes("rock") || l.includes("alt")) return "g-rock";
-  if (l.includes("r&b") || l.includes("soul") || l.includes("jazz")) return "g-rnb";
-  if (l.includes("pop")) return "g-pop";
-  if (l.includes("indie")) return "g-indie";
-  return "g-default";
-}
-
-function esc(s) {
-  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function spotifySearch(a, s) {
-  return "https://open.spotify.com/search/" + encodeURIComponent((a ? a + " " : "") + s);
-}
-
-function populateGenres(posts) {
-  const sel = document.getElementById("gf");
-  while (sel.options.length > 1) sel.remove(1);
-  [...new Set(posts.map(p => p.genre).filter(Boolean))].sort().forEach(g => {
-    const o = document.createElement("option"); o.value = g; o.textContent = g; sel.appendChild(o);
-  });
-}
-
-async function fetchArtwork(artist, song) {
-  const key = artist + "|" + song;
-  if (artCache[key] !== undefined) return artCache[key];
-  try {
-    const q = encodeURIComponent((artist ? artist + " " : "") + song);
-    const res = await fetch("https://itunes.apple.com/search?term=" + q + "&media=music&limit=1");
-    const data = await res.json();
-    const url = data.results && data.results[0] ? data.results[0].artworkUrl100.replace("100x100", "200x200") : null;
-    artCache[key] = url;
-    return url;
-  } catch(e) {
-    artCache[key] = null;
-    return null;
-  }
-}
-
-function artHTML(key) {
-  const url = artCache[key];
-  if (url) return `<img class="artwork" src="${esc(url)}" alt="album art" loading="lazy">`;
-  return `<div class="artwork-placeholder">${musicIcon}</div>`;
-}
-
-async function loadArtworkForVisible(posts) {
-  // fetch artwork in small batches to avoid hammering the API
-  for (let i = 0; i < posts.length; i += 5) {
-    const batch = posts.slice(i, i + 5);
-    await Promise.all(batch.map(p => fetchArtwork(p.artist || "", p.song)));
-    // update just the artwork elements already rendered
-    batch.forEach(p => {
-      const key = (p.artist || "") + "|" + p.song;
-      const el = document.getElementById("art-" + CSS.escape(key));
-      if (el) el.outerHTML = artHTML(key);
-    });
-    await new Promise(r => setTimeout(r, 200)); // small delay between batches
-  }
-}
-
-function filter() {
-  const q = document.getElementById("search").value.toLowerCase();
-  const g = document.getElementById("gf").value;
-  const res = allPosts.filter(p => {
-    const mq = !q || (p.artist||"").toLowerCase().includes(q) || p.song.toLowerCase().includes(q) || (p.genre||"").toLowerCase().includes(q);
-    return mq && (!g || p.genre === g);
-  });
-  document.getElementById("badge").textContent = res.length + " posts";
-  const list = document.getElementById("list");
-  if (!res.length) { list.innerHTML = "<p class=\"status\">No results found.</p>"; return; }
-  list.innerHTML = res.map((p, i) => {
-    const key = (p.artist || "") + "|" + p.song;
-    const cachedArt = artCache[key] !== undefined ? artHTML(key) : `<div class="artwork-placeholder" id="art-${esc(key)}">${musicIcon}</div>`;
-    return `<div class="card">
-      <span class="num">${i + 1}</span>
-      ${cachedArt}
-      <div class="info">
-        <div class="song">${esc(p.song)}</div>
-        <div class="artist">${esc(p.artist || "")}</div>
-      </div>
-      <div class="meta">
-        <span class="date">${esc(p.date || "")}</span>
-        ${p.genre ? `<span class="pill ${gc(p.genre)}">${esc(p.genre)}</span>` : ""}
-        <a class="btn" href="${esc(spotifySearch(p.artist, p.song))}" target="_blank" rel="noopener">${playIcon} Play</a>
-      </div>
-    </div>`;
-  }).join("");
-
-  // load artwork for filtered results
-  loadArtworkForVisible(res);
-}
-
-async function init() {
-  try {
-    const res = await fetch("posts.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("HTTP " + res.status);
-    const data = await res.json();
-    allPosts = data.posts || [];
-    document.getElementById("subtitle").textContent =
-      "Auto-updated hourly \u00b7 Last updated " + (data.updated || "recently");
-    document.getElementById("controls").style.display = "flex";
-    populateGenres(allPosts);
-    filter();
-  } catch (e) {
-    document.getElementById("subtitle").textContent = "Earmilk Hourly Feed";
-    document.getElementById("list").innerHTML =
-      "<p class=\"status error\">Could not load posts.json \u2014 " + e.message + "</p>";
-  }
-}
-
-init();
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Earmilk Hourly Feed</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
-  .container { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
-  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  h1 { font-size: 24px; font-weight: 600; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1DB954; flex-shrink: 0; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
-  .controls { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
-  input[type=text], select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fff; color: #1a1a1a; outline: none; }
-  input[type=text]:focus, select:focus { border-color: #aaa; }
-  input[type=text] { flex: 1; min-width: 160px; }
-  select { min-width: 130px; }
-  .badge { font-size: 13px; color: #888; margin-left: auto; white-space: nowrap; }
-  .list { display: flex; flex-direction: column; gap: 8px; }
-  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
-  .card:hover { border-color: #bbb; }
-  .num { font-size: 12px; color: #bbb; min-width: 26px; text-align: right; flex-shrink: 0; }
-  .info { flex: 1; min-width: 0; }
-  .song { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .artist { font-size: 13px; color: #666; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .meta { display: flex; align-items: center; gap: 7px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
-  .date { font-size: 11px; color: #bbb; white-space: nowrap; }
-  .pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; white-space: nowrap; font-weight: 500; }
-  .g-indie      { background: #e8f5e9; color: #2e7d32; }
-  .g-hiphop     { background: #fff8e1; color: #f57f17; }
-  .g-electronic { background: #e3f2fd; color: #1565c0; }
-  .g-folk       { background: #f1f8e9; color: #558b2f; }
-  .g-rock       { background: #fff3e0; color: #e65100; }
-  .g-pop        { background: #fce4ec; color: #880e4f; }
-  .g-rnb        { background: #f3e5f5; color: #6a1b9a; }
-  .g-default    { background: #f5f5f5; color: #555; }
-  a.btn { font-size: 12px; padding: 5px 12px; border-radius: 8px; border: 1px solid #1DB954; background: transparent; color: #1DB954; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
-  a.btn:hover { background: #f0faf3; }
-  .status { font-size: 14px; color: #888; padding: 3rem 0; text-align: center; }
-  .error { color: #c0392b; }
-  @media (max-width: 520px) { .date, .pill { display: none; } .card { padding: 10px 12px; } }
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header"><span class="dot"></span><h1>Earmilk Hourly Feed</h1></div>
-  <p class="subtitle" id="subtitle">Loading feed...</p>
-  <div class="controls" id="controls" style="display:none">
-    <input type="text" id="search" placeholder="Search artist or song..." oninput="filter()">
-    <select id="gf" onchange="filter()"><option value="">All genres</option></select>
-    <span class="badge" id="badge"></span>
-  </div>
-  <div class="list" id="list"><p class="status">Fetching latest posts...</p></div>
-</div>
-
-<script>
-const playIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
-let allPosts = [];
-
-function gc(g) {
-  const l = (g || "").toLowerCase();
-  if (l.includes("hip") || l.includes("rap")) return "g-hiphop";
-  if (l.includes("electro") || l.includes("house") || l.includes("dance") || l.includes("ambient")) return "g-electronic";
-  if (l.includes("folk") || l.includes("americana") || l.includes("country")) return "g-folk";
-  if (l.includes("rock") || l.includes("alt")) return "g-rock";
-  if (l.includes("r&b") || l.includes("soul") || l.includes("jazz")) return "g-rnb";
-  if (l.includes("pop")) return "g-pop";
-  if (l.includes("indie")) return "g-indie";
-  return "g-default";
-}
-
-function esc(s) {
-  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
-
-function spotifySearch(a, s) {
-  return "https://open.spotify.com/search/" + encodeURIComponent((a ? a + " " : "") + s);
-}
-
-function populateGenres(posts) {
-  const sel = document.getElementById("gf");
-  while (sel.options.length > 1) sel.remove(1);
-  [...new Set(posts.map(p => p.genre).filter(Boolean))].sort().forEach(g => {
-    const o = document.createElement("option"); o.value = g; o.textContent = g; sel.appendChild(o);
-  });
-}
-
-function filter() {
-  const q = document.getElementById("search").value.toLowerCase();
-  const g = document.getElementById("gf").value;
-  const res = allPosts.filter(p => {
-    const mq = !q || (p.artist||"").toLowerCase().includes(q) || p.song.toLowerCase().includes(q) || (p.genre||"").toLowerCase().includes(q);
-    return mq && (!g || p.genre === g);
-  });
-  document.getElementById("badge").textContent = res.length + " posts";
-  const list = document.getElementById("list");
-  if (!res.length) { list.innerHTML = "<p class=\"status\">No results found.</p>"; return; }
-  list.innerHTML = res.map((p, i) => `
-    <div class="card">
-      <span class="num">${i + 1}</span>
-      <div class="info">
-        <div class="song">${esc(p.song)}</div>
-        <div class="artist">${esc(p.artist || "")}</div>
-      </div>
-      <div class="meta">
-        <span class="date">${esc(p.date || "")}</span>
-        ${p.genre ? `<span class="pill ${gc(p.genre)}">${esc(p.genre)}</span>` : ""}
-        <a class="btn" href="${esc(spotifySearch(p.artist, p.song))}" target="_blank" rel="noopener">${playIcon} Play</a>
-      </div>
-    </div>`).join("");
-}
-
-async function init() {
-  try {
-    const res = await fetch("posts.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("Could not load posts.json");
-    const data = await res.json();
-    allPosts = data.posts || [];
-    document.getElementById("subtitle").textContent =
-      "Auto-updated hourly \u00b7 Last updated " + (data.updated || "recently");
-    document.getElementById("controls").style.display = "flex";
-    populateGenres(allPosts);
-    filter();
-  } catch (e) {
-    document.getElementById("subtitle").textContent = "Earmilk daily feed";
-    document.getElementById("list").innerHTML =
-      "<p class=\"status error\">Could not load posts. Make sure posts.json is in the same folder.</p>";
-  }
-}
-
-init();
-</script>
-</body>
-</html>
