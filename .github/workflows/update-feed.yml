@@ -2,7 +2,7 @@ name: Update Earmilk Feed
 
 on:
   schedule:
-    - cron: "0 8 * * *"   # runs every day at 8am UTC
+    - cron: "0 * * * *"   # runs every hour
   workflow_dispatch:        # lets you trigger it manually from GitHub too
 
 jobs:
