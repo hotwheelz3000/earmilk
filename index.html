@@ -20,6 +20,192 @@
   select { min-width: 130px; }
   .badge { font-size: 13px; color: #888; margin-left: auto; white-space: nowrap; }
   .list { display: flex; flex-direction: column; gap: 8px; }
+  .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
+  .card:hover { border-color: #bbb; }
+  .num { font-size: 12px; color: #bbb; min-width: 22px; text-align: right; flex-shrink: 0; }
+  .artwork { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #eee; }
+  .artwork-placeholder { width: 48px; height: 48px; border-radius: 8px; background: #e8e8e8; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .artwork-placeholder svg { opacity: 0.3; }
+  .info { flex: 1; min-width: 0; }
+  .song { font-size: 15px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .artist { font-size: 13px; color: #666; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .meta { display: flex; align-items: center; gap: 7px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+  .date { font-size: 11px; color: #bbb; white-space: nowrap; }
+  .pill { font-size: 11px; padding: 2px 8px; border-radius: 99px; white-space: nowrap; font-weight: 500; }
+  .g-indie      { background: #e8f5e9; color: #2e7d32; }
+  .g-hiphop     { background: #fff8e1; color: #f57f17; }
+  .g-electronic { background: #e3f2fd; color: #1565c0; }
+  .g-folk       { background: #f1f8e9; color: #558b2f; }
+  .g-rock       { background: #fff3e0; color: #e65100; }
+  .g-pop        { background: #fce4ec; color: #880e4f; }
+  .g-rnb        { background: #f3e5f5; color: #6a1b9a; }
+  .g-default    { background: #f5f5f5; color: #555; }
+  a.btn { font-size: 12px; padding: 5px 12px; border-radius: 8px; border: 1px solid #1DB954; background: transparent; color: #1DB954; text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px; line-height: 1; }
+  a.btn:hover { background: #f0faf3; }
+  .status { font-size: 14px; color: #888; padding: 3rem 0; text-align: center; }
+  .error { color: #c0392b; }
+  @media (max-width: 520px) { .date, .pill { display: none; } .card { padding: 10px 12px; } .artwork, .artwork-placeholder { width: 40px; height: 40px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header"><span class="dot"></span><h1>Earmilk Hourly Feed</h1></div>
+  <p class="subtitle" id="subtitle">Loading feed...</p>
+  <div class="controls" id="controls" style="display:none">
+    <input type="text" id="search" placeholder="Search artist or song..." oninput="filter()">
+    <select id="gf" onchange="filter()"><option value="">All genres</option></select>
+    <span class="badge" id="badge"></span>
+  </div>
+  <div class="list" id="list"><p class="status">Fetching latest posts...</p></div>
+</div>
+
+<script>
+const playIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
+const musicIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>`;
+
+let allPosts = [];
+const artCache = {};
+
+function gc(g) {
+  const l = (g || "").toLowerCase();
+  if (l.includes("hip") || l.includes("rap")) return "g-hiphop";
+  if (l.includes("electro") || l.includes("house") || l.includes("dance") || l.includes("ambient")) return "g-electronic";
+  if (l.includes("folk") || l.includes("americana") || l.includes("country")) return "g-folk";
+  if (l.includes("rock") || l.includes("alt")) return "g-rock";
+  if (l.includes("r&b") || l.includes("soul") || l.includes("jazz")) return "g-rnb";
+  if (l.includes("pop")) return "g-pop";
+  if (l.includes("indie")) return "g-indie";
+  return "g-default";
+}
+
+function esc(s) {
+  return String(s || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function spotifySearch(a, s) {
+  return "https://open.spotify.com/search/" + encodeURIComponent((a ? a + " " : "") + s);
+}
+
+function populateGenres(posts) {
+  const sel = document.getElementById("gf");
+  while (sel.options.length > 1) sel.remove(1);
+  [...new Set(posts.map(p => p.genre).filter(Boolean))].sort().forEach(g => {
+    const o = document.createElement("option"); o.value = g; o.textContent = g; sel.appendChild(o);
+  });
+}
+
+async function fetchArtwork(artist, song) {
+  const key = artist + "|" + song;
+  if (artCache[key] !== undefined) return artCache[key];
+  try {
+    const q = encodeURIComponent((artist ? artist + " " : "") + song);
+    const res = await fetch("https://itunes.apple.com/search?term=" + q + "&media=music&limit=1");
+    const data = await res.json();
+    const url = data.results && data.results[0] ? data.results[0].artworkUrl100.replace("100x100", "200x200") : null;
+    artCache[key] = url;
+    return url;
+  } catch(e) {
+    artCache[key] = null;
+    return null;
+  }
+}
+
+function artHTML(key) {
+  const url = artCache[key];
+  if (url) return `<img class="artwork" src="${esc(url)}" alt="album art" loading="lazy">`;
+  return `<div class="artwork-placeholder">${musicIcon}</div>`;
+}
+
+async function loadArtworkForVisible(posts) {
+  // fetch artwork in small batches to avoid hammering the API
+  for (let i = 0; i < posts.length; i += 5) {
+    const batch = posts.slice(i, i + 5);
+    await Promise.all(batch.map(p => fetchArtwork(p.artist || "", p.song)));
+    // update just the artwork elements already rendered
+    batch.forEach(p => {
+      const key = (p.artist || "") + "|" + p.song;
+      const el = document.getElementById("art-" + CSS.escape(key));
+      if (el) el.outerHTML = artHTML(key);
+    });
+    await new Promise(r => setTimeout(r, 200)); // small delay between batches
+  }
+}
+
+function filter() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const g = document.getElementById("gf").value;
+  const res = allPosts.filter(p => {
+    const mq = !q || (p.artist||"").toLowerCase().includes(q) || p.song.toLowerCase().includes(q) || (p.genre||"").toLowerCase().includes(q);
+    return mq && (!g || p.genre === g);
+  });
+  document.getElementById("badge").textContent = res.length + " posts";
+  const list = document.getElementById("list");
+  if (!res.length) { list.innerHTML = "<p class=\"status\">No results found.</p>"; return; }
+  list.innerHTML = res.map((p, i) => {
+    const key = (p.artist || "") + "|" + p.song;
+    const cachedArt = artCache[key] !== undefined ? artHTML(key) : `<div class="artwork-placeholder" id="art-${esc(key)}">${musicIcon}</div>`;
+    return `<div class="card">
+      <span class="num">${i + 1}</span>
+      ${cachedArt}
+      <div class="info">
+        <div class="song">${esc(p.song)}</div>
+        <div class="artist">${esc(p.artist || "")}</div>
+      </div>
+      <div class="meta">
+        <span class="date">${esc(p.date || "")}</span>
+        ${p.genre ? `<span class="pill ${gc(p.genre)}">${esc(p.genre)}</span>` : ""}
+        <a class="btn" href="${esc(spotifySearch(p.artist, p.song))}" target="_blank" rel="noopener">${playIcon} Play</a>
+      </div>
+    </div>`;
+  }).join("");
+
+  // load artwork for filtered results
+  loadArtworkForVisible(res);
+}
+
+async function init() {
+  try {
+    const res = await fetch("posts.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json();
+    allPosts = data.posts || [];
+    document.getElementById("subtitle").textContent =
+      "Auto-updated hourly \u00b7 Last updated " + (data.updated || "recently");
+    document.getElementById("controls").style.display = "flex";
+    populateGenres(allPosts);
+    filter();
+  } catch (e) {
+    document.getElementById("subtitle").textContent = "Earmilk Hourly Feed";
+    document.getElementById("list").innerHTML =
+      "<p class=\"status error\">Could not load posts.json \u2014 " + e.message + "</p>";
+  }
+}
+
+init();
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Earmilk Hourly Feed</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f5f5f3; color: #1a1a1a; min-height: 100vh; }
+  .container { max-width: 760px; margin: 0 auto; padding: 2rem 1rem; }
+  .header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  h1 { font-size: 24px; font-weight: 600; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1DB954; flex-shrink: 0; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .subtitle { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+  .controls { display: flex; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; align-items: center; }
+  input[type=text], select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; background: #fff; color: #1a1a1a; outline: none; }
+  input[type=text]:focus, select:focus { border-color: #aaa; }
+  input[type=text] { flex: 1; min-width: 160px; }
+  select { min-width: 130px; }
+  .badge { font-size: 13px; color: #888; margin-left: auto; white-space: nowrap; }
+  .list { display: flex; flex-direction: column; gap: 8px; }
   .card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.15s; }
   .card:hover { border-color: #bbb; }
   .num { font-size: 12px; color: #bbb; min-width: 26px; text-align: right; flex-shrink: 0; }
