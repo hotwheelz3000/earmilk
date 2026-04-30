@@ -16,39 +16,47 @@ def fetch_url(url, timeout=10):
 def fetch_feed():
     return fetch_url(FEED_URL, timeout=15)
 
-def fetch_artwork(artist, song, title):
-    # Try artist+song first, fall back to full title
-    queries = []
-    if artist and song:
-        queries.append(artist + " " + song)
-    queries.append(title)
-
-    for q in queries:
-        try:
-            encoded = urllib.parse.quote(q.strip())
-            url = "https://itunes.apple.com/search?term={}&media=music&limit=1".format(encoded)
-            data = json.loads(fetch_url(url))
-            if data.get("results"):
-                art = data["results"][0].get("artworkUrl100", "")
-                if art:
-                    return art.replace("100x100bb", "400x400bb")
-        except Exception as e:
-            print("  artwork fetch failed for {!r}: {}".format(q, e))
-        time.sleep(0.5)
+def fetch_artwork(search_term):
+    try:
+        encoded = urllib.parse.quote(search_term.strip())
+        url = "https://itunes.apple.com/search?term={}&media=music&limit=1".format(encoded)
+        data = json.loads(fetch_url(url))
+        if data.get("results"):
+            art = data["results"][0].get("artworkUrl100", "")
+            if art:
+                return art.replace("100x100bb", "400x400bb")
+    except Exception as e:
+        print("  artwork error: {}".format(e))
+    time.sleep(0.4)
     return ""
 
-def parse_title(title):
-    # "Artist - Song" or "Artist - "Song""
-    dash = re.match(r'^(.+?)\s*\u2013\s*[\u201c"]?(.+?)[\u201d"]?\s*$', title)
-    if not dash:
-        dash = re.match(r'^(.+?)\s+-\s+[\u201c"]?(.+?)[\u201d"]?\s*$', title)
-    if dash:
-        return dash.group(1).strip(), dash.group(2).strip()
-    # "Song" by Artist
-    by = re.match(r'^[\u201c"]?(.+?)[\u201d"]?\s+by\s+(.+)$', title, re.IGNORECASE)
-    if by:
-        return by.group(2).strip(), by.group(1).strip()
-    return "", title
+def extract_artist_song(headline):
+    """
+    Parse Earmilk blog headlines like:
+    - 'Max Nemo shares powerful new album "Nexus"'
+    - 'Jill Scott returns with new single "Beautiful People"'
+    - 'Haunted Images releases new single "I\'ll Come Around"'
+    - 'CAPYAC & Lando Chill deliver groove on "Rye Bread"'
+    Returns (artist, song) or ("", headline) if no match.
+    """
+    # Match quoted song title (smart quotes or regular)
+    song_match = re.search(r'[\u201c\u2018"\'](.+?)[\u201d\u2019"\']', headline)
+    song = song_match.group(1).strip() if song_match else ""
+
+    # Artist is typically everything before the first verb word
+    # Common patterns: "Artist shares/releases/drops/returns with/delivers"
+    artist_match = re.match(
+        r'^(.+?)\s+(?:shares?|releases?|drops?|returns?|delivers?|unveils?|presents?|launches?|announces?|debuts?|steps|marks|dives|channels|hosts|steps)\b',
+        headline, re.IGNORECASE
+    )
+    artist = artist_match.group(1).strip() if artist_match else ""
+
+    # Clean up artist — remove trailing punctuation
+    artist = re.sub(r'[,;]+$', '', artist).strip()
+
+    if artist and song:
+        return artist, song
+    return "", headline
 
 def parse_date(date_str):
     try:
@@ -87,21 +95,23 @@ def main():
         pub_el   = item.find("pubDate")
         cats     = [c.text.strip() for c in item.findall("category") if c.text]
 
-        title  = title_el.text.strip() if title_el is not None and title_el.text else ""
-        link   = link_el.text.strip()  if link_el  is not None and link_el.text  else "#"
-        date   = parse_date(pub_el.text.strip() if pub_el is not None and pub_el.text else "")
-        genre  = get_genre(cats)
-        artist, song = parse_title(title)
+        headline = title_el.text.strip() if title_el is not None and title_el.text else ""
+        link     = link_el.text.strip()  if link_el  is not None and link_el.text  else "#"
+        date     = parse_date(pub_el.text.strip() if pub_el is not None and pub_el.text else "")
+        genre    = get_genre(cats)
+        artist, song = extract_artist_song(headline)
 
-        print("  {} | {} | {}".format(artist, song, title))
+        print("  HEADLINE: {}".format(headline))
+        print("  -> artist={!r} song={!r}".format(artist, song))
 
         cache_key = artist + "|" + song
         if cache_key in art_cache and art_cache[cache_key]:
             artwork = art_cache[cache_key]
-            print("    -> cached artwork")
+            print("  -> artwork: cached")
         else:
-            artwork = fetch_artwork(artist, song, title)
-            print("    -> artwork: {}".format(artwork[:60] if artwork else "none"))
+            search = (artist + " " + song).strip() if artist else song
+            artwork = fetch_artwork(search)
+            print("  -> artwork: {}".format(artwork[:80] if artwork else "none"))
 
         posts.append({
             "artist":  artist,
@@ -120,7 +130,7 @@ def main():
     with open("posts.json", "w") as f:
         json.dump(out, f, indent=2)
 
-    print("Wrote {} posts to posts.json".format(len(posts)))
+    print("Done. Wrote {} posts.".format(len(posts)))
 
 if __name__ == "__main__":
     main()
