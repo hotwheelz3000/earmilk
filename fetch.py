@@ -150,7 +150,7 @@ def main():
     existing_posts.sort(key=lambda p: p.get("sort_date", "20260101"), reverse=True)
 
     out = {
-        "updated": datetime.utcnow().strftime("%b %-d, %Y"),
+        "updated": datetime.now().strftime("%b %-d, %Y %I:%M %p PT"),
         "posts": existing_posts
     }
 
