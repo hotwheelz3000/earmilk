@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 import json
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 FEED_URL = "https://earmilk.com/feed"
 
@@ -150,7 +150,7 @@ def main():
     existing_posts.sort(key=lambda p: p.get("sort_date", "20260101"), reverse=True)
 
     out = {
-        "updated": datetime.now().strftime("%b %-d, %Y %I:%M %p PT"),
+        "updated": datetime.now(timezone(timedelta(hours=-7))).strftime("%b %-d, %Y %I:%M %p PT"),
         "posts": existing_posts
     }
 
