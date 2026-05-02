@@ -14,17 +14,33 @@ def fetch_url(url, timeout=10):
         return resp.read().decode('utf-8')
 
 def fetch_artwork(artist, song):
-    try:
-        q = urllib.parse.quote((artist + ' ' + song).strip())
-        url = 'https://itunes.apple.com/search?term=' + q + '&media=music&limit=1'
-        data = json.loads(fetch_url(url))
-        if data.get('results'):
-            art = data['results'][0].get('artworkUrl100', '')
-            if art:
-                return art.replace('100x100bb', '400x400bb')
-    except Exception as e:
-        print('artwork error: ' + str(e))
-    time.sleep(0.4)
+    # Try multiple search strategies for best coverage
+    queries = [
+        artist + ' ' + song,
+        song + ' ' + artist,
+        artist,
+    ]
+    for q in queries:
+        try:
+            encoded = urllib.parse.quote(q.strip())
+            url = 'https://itunes.apple.com/search?term=' + encoded + '&media=music&limit=5&entity=song'
+            data = json.loads(fetch_url(url))
+            results = data.get('results', [])
+            # Prefer exact artist match
+            for r in results:
+                r_artist = r.get('artistName', '').lower()
+                if artist.lower() in r_artist or r_artist in artist.lower():
+                    art = r.get('artworkUrl100', '').replace('100x100bb', '400x400bb')
+                    if art:
+                        return art
+            # Fall back to first result
+            if results:
+                art = results[0].get('artworkUrl100', '').replace('100x100bb', '400x400bb')
+                if art:
+                    return art
+        except Exception as e:
+            print('artwork error: ' + str(e))
+        time.sleep(0.3)
     return ''
 
 VERBS = (
@@ -33,10 +49,12 @@ VERBS = (
     r'explores?|reveals?|offers?|brings?|gives?|puts?\s+out|'
     r'links?\s+up|teams?\s+up|gets?|makes?|takes?|shows?|'
     r'moves?|rebuilds?|slingshots?|lights?\s+up|'
-    r'captures?|crafts?|creates?|blends?|fuses?|mixes?'
+    r'captures?|crafts?|creates?|blends?|fuses?|mixes?|'
+    r'turns?|reclaims?|reimagines?|blends?|pushes?'
 )
 
 def extract_artist_song(headline):
+    # Pattern 1: "Song" is ... Artist
     song_first = re.match(r'^\u201c(.+?)\u201d\s+is\s+', headline, re.IGNORECASE)
     if song_first:
         song = song_first.group(1).strip()
@@ -48,10 +66,12 @@ def extract_artist_song(headline):
         if artist and song:
             return artist, song
 
+    # Pattern 2: Artist's "Song"
     possessive = re.match(r'^(.+?)[\u2019\']s\s+\u201c(.+?)\u201d', headline)
     if possessive:
         return possessive.group(1).strip(), possessive.group(2).strip()
 
+    # Pattern 3: Artist VERB ... "Song"
     artist_match = re.match(r'^(.+?)\s+(?:' + VERBS + r')\b', headline, re.IGNORECASE)
     artist = ''
     if artist_match:
@@ -106,6 +126,7 @@ def main():
     song_to_post = {(p.get('artist', '').lower() + '|' + p.get('song', '').lower()): p for p in existing_posts}
     print('Loaded ' + str(len(existing_posts)) + ' existing posts')
 
+    # Fill missing artwork for existing posts
     for p in existing_posts:
         if not p.get('artwork') and p.get('artist') and p.get('song'):
             print('fetching artwork: ' + p['artist'] + ' - ' + p['song'])
