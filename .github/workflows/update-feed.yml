@@ -11,6 +11,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    continue-on-error: true
     env:
       TZ: America/Los_Angeles
     steps:
@@ -23,9 +24,11 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch Earmilk RSS
+        continue-on-error: true
         run: python fetch.py
 
       - name: Commit updated posts.json
+        continue-on-error: true
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
