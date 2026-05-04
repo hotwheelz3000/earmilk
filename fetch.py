@@ -99,7 +99,7 @@ def extract_artist_song(headline):
         artist = re.sub(r'[\u2019\']s?\s*$', '', artist_match.group(1)).strip()
         artist = re.sub(r'[,;:]+$', '', artist).strip()
         artist = re.sub(r'\s+and\s+', ' & ', artist)
-    quoted = re.findall(r'\u201c([^\u201d]{3,80})\u201d', headline)
+    quoted = re.findall(r'[\u201c"]((?:(?![\u201d"])[\s\S]){3,80})[\u201d"]', headline)
     song = quoted[0].strip() if quoted else ''
     if artist and song:
         return artist, song
