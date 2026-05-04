@@ -6,7 +6,13 @@ import re
 import time
 from datetime import datetime, timezone, timedelta
 
-FEED_URL = 'https://earmilk.com/feed'
+FEED_PAGES = [
+    'https://earmilk.com/feed',
+    'https://earmilk.com/feed?paged=2',
+    'https://earmilk.com/feed?paged=3',
+    'https://earmilk.com/feed?paged=4',
+    'https://earmilk.com/feed?paged=5',
+]
 
 def fetch_url(url, timeout=10):
     req = urllib.request.Request(url, headers={'User-Agent': 'EarmilkFeed/1.0'})
@@ -127,6 +133,48 @@ def get_genre(categories):
             return c
     return categories[0] if categories else ''
 
+def parse_feed(xml, url_to_post, song_to_post, existing_posts):
+    root = ET.fromstring(xml)
+    added = 0
+    for item in root.findall('.//item'):
+        title_el = item.find('title')
+        link_el = item.find('link')
+        pub_el = item.find('pubDate')
+        cats = [c.text.strip() for c in item.findall('category') if c.text]
+        headline = title_el.text.strip() if title_el is not None and title_el.text else ''
+        link = link_el.text.strip().split('?')[0] if link_el is not None and link_el.text else '#'
+        pub_raw = pub_el.text.strip() if pub_el is not None and pub_el.text else ''
+        date = parse_date(pub_raw)
+        sort_date = parse_sort_date(pub_raw)
+        genre = get_genre(cats)
+        if link in url_to_post:
+            continue
+        artist, song = extract_artist_song(headline)
+        print('NEW: ' + repr(headline) + ' -> ' + repr(artist) + ' / ' + repr(song))
+        if not artist or not song:
+            print('SKIPPED')
+            continue
+        song_key = artist.lower() + '|' + song.lower()
+        if song_key in song_to_post:
+            print('DUPLICATE SKIPPED')
+            continue
+        artwork = fetch_artwork(artist, song)
+        new_post = {
+            'artist': artist,
+            'song': song,
+            'genre': genre,
+            'date': date,
+            'sort_date': sort_date,
+            'url': link,
+            'artwork': artwork
+        }
+        existing_posts.append(new_post)
+        url_to_post[link] = new_post
+        song_to_post[song_key] = new_post
+        print('ADDED: ' + artist + ' - ' + song)
+        added += 1
+    return added
+
 def main():
     try:
         with open('posts.json') as f:
@@ -146,48 +194,17 @@ def main():
         if not p.get('sort_date'):
             p['sort_date'] = display_to_sort(p.get('date', 'Jan 1'))
 
-    print('Fetching RSS...')
-    try:
-        xml = fetch_url(FEED_URL, timeout=15)
-        root = ET.fromstring(xml)
-        for item in root.findall('.//item'):
-            title_el = item.find('title')
-            link_el = item.find('link')
-            pub_el = item.find('pubDate')
-            cats = [c.text.strip() for c in item.findall('category') if c.text]
-            headline = title_el.text.strip() if title_el is not None and title_el.text else ''
-            link = link_el.text.strip().split('?')[0] if link_el is not None and link_el.text else '#'
-            pub_raw = pub_el.text.strip() if pub_el is not None and pub_el.text else ''
-            date = parse_date(pub_raw)
-            sort_date = parse_sort_date(pub_raw)
-            genre = get_genre(cats)
-            if link in url_to_post:
-                continue
-            artist, song = extract_artist_song(headline)
-            print('NEW: ' + repr(headline) + ' -> ' + repr(artist) + ' / ' + repr(song))
-            if not artist or not song:
-                print('SKIPPED')
-                continue
-            song_key = artist.lower() + '|' + song.lower()
-            if song_key in song_to_post:
-                print('DUPLICATE SKIPPED')
-                continue
-            artwork = fetch_artwork(artist, song)
-            new_post = {
-                'artist': artist,
-                'song': song,
-                'genre': genre,
-                'date': date,
-                'sort_date': sort_date,
-                'url': link,
-                'artwork': artwork
-            }
-            existing_posts.append(new_post)
-            url_to_post[link] = new_post
-            song_to_post[song_key] = new_post
-            print('ADDED: ' + artist + ' - ' + song)
-    except Exception as e:
-        print('RSS error: ' + str(e))
+    total_added = 0
+    for feed_url in FEED_PAGES:
+        print('Fetching: ' + feed_url)
+        try:
+            xml = fetch_url(feed_url, timeout=15)
+            added = parse_feed(xml, url_to_post, song_to_post, existing_posts)
+            total_added += added
+            print('Page added ' + str(added) + ' posts')
+            time.sleep(1)
+        except Exception as e:
+            print('Feed error: ' + str(e))
 
     existing_posts.sort(key=lambda p: p.get('sort_date', '20260101'), reverse=True)
     out = {
@@ -196,7 +213,12 @@ def main():
     }
     with open('posts.json', 'w') as f:
         json.dump(out, f, indent=2)
-    print('Done. ' + str(len(existing_posts)) + ' posts.')
+    print('Done. Total added: ' + str(total_added) + '. Total posts: ' + str(len(existing_posts)))
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print('Fatal error: ' + str(e))
+        import sys
+        sys.exit(0)
