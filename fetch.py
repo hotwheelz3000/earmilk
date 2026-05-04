@@ -76,7 +76,7 @@ VERBS = (
     r'links?\s+up|teams?\s+up|gets?|makes?|takes?|shows?|'
     r'moves?|rebuilds?|slingshots?|lights?\s+up|'
     r'captures?|crafts?|creates?|blends?|fuses?|mixes?|'
-    r'turns?|reclaims?|reimagines?|pushes?'
+    r'turns?|reclaims?|reimagines?|pushes?|reflects?|deals?|finds?|chats?'
 )
 
 def extract_artist_song(headline):
@@ -133,6 +133,63 @@ def get_genre(categories):
             return c
     return categories[0] if categories else ''
 
+def get_archive_urls(html):
+    pattern = r'https://earmilk\.com/2026/\d{2}/\d{2}/[a-z0-9\-]+/'
+    urls = re.findall(pattern, html)
+    return list(dict.fromkeys(urls))
+
+def scrape_archive_page(url, url_to_post, song_to_post, existing_posts):
+    try:
+        html = fetch_url(url, timeout=15)
+        article_urls = get_archive_urls(html)
+        print('  Found ' + str(len(article_urls)) + ' article URLs on ' + url)
+        added = 0
+        for art_url in article_urls:
+            if art_url in url_to_post:
+                continue
+            try:
+                art_html = fetch_url(art_url, timeout=10)
+                title_match = re.search(r'<title>([^<]+)\s*[–-]\s*EARMILK', art_html)
+                if not title_match:
+                    continue
+                headline = title_match.group(1).strip()
+                date_match = re.search(r'"datePublished":"(\d{4}-\d{2}-\d{2})', art_html)
+                sort_date = date_match.group(1).replace('-', '') if date_match else '20260101'
+                month_day = datetime.strptime(sort_date, '%Y%m%d').strftime('%b %-d') if sort_date != '20260101' else ''
+                cat_matches = re.findall(r'"category"[^>]*>([^<]+)<', art_html)
+                genre = get_genre([c.strip() for c in cat_matches if c.strip()])
+                artist, song = extract_artist_song(headline)
+                print('  ARCHIVE: ' + repr(headline) + ' -> ' + repr(artist) + ' / ' + repr(song))
+                if not artist or not song:
+                    print('  -> SKIPPED')
+                    continue
+                song_key = artist.lower() + '|' + song.lower()
+                if song_key in song_to_post:
+                    print('  -> DUPLICATE SKIPPED')
+                    continue
+                artwork = fetch_artwork(artist, song)
+                new_post = {
+                    'artist': artist,
+                    'song': song,
+                    'genre': genre,
+                    'date': month_day,
+                    'sort_date': sort_date,
+                    'url': art_url,
+                    'artwork': artwork
+                }
+                existing_posts.append(new_post)
+                url_to_post[art_url] = new_post
+                song_to_post[song_key] = new_post
+                print('  -> ADDED: ' + artist + ' - ' + song)
+                added += 1
+                time.sleep(0.5)
+            except Exception as e:
+                print('  Article error: ' + str(e))
+        return added
+    except Exception as e:
+        print('Archive page error: ' + str(e))
+        return 0
+
 def parse_feed(xml, url_to_post, song_to_post, existing_posts):
     root = ET.fromstring(xml)
     added = 0
@@ -175,6 +232,14 @@ def parse_feed(xml, url_to_post, song_to_post, existing_posts):
         added += 1
     return added
 
+def get_recent_archive_dates():
+    dates = []
+    now = datetime.now(timezone(timedelta(hours=-7)))
+    for i in range(7):
+        d = now - timedelta(days=i)
+        dates.append(d.strftime('%Y/%m/%d'))
+    return dates
+
 def main():
     try:
         with open('posts.json') as f:
@@ -195,16 +260,25 @@ def main():
             p['sort_date'] = display_to_sort(p.get('date', 'Jan 1'))
 
     total_added = 0
+
+    print('Fetching RSS feeds...')
     for feed_url in FEED_PAGES:
-        print('Fetching: ' + feed_url)
         try:
             xml = fetch_url(feed_url, timeout=15)
             added = parse_feed(xml, url_to_post, song_to_post, existing_posts)
             total_added += added
-            print('Page added ' + str(added) + ' posts')
+            print('RSS page added ' + str(added) + ' posts')
             time.sleep(1)
         except Exception as e:
-            print('Feed error: ' + str(e))
+            print('RSS error: ' + str(e))
+
+    print('Scraping daily archive pages...')
+    for date_path in get_recent_archive_dates():
+        archive_url = 'https://earmilk.com/' + date_path + '/'
+        print('Checking: ' + archive_url)
+        added = scrape_archive_page(archive_url, url_to_post, song_to_post, existing_posts)
+        total_added += added
+        time.sleep(1)
 
     existing_posts.sort(key=lambda p: p.get('sort_date', '20260101'), reverse=True)
     out = {
