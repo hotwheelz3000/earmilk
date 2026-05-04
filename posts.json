@@ -1,6 +1,42 @@
 {
-  "updated": "May 4, 2026 03:22 PM PT",
+  "updated": "May 4, 2026",
   "posts": [
+    {
+      "artist": "TRYPT",
+      "song": "Undone",
+      "genre": "Electronic",
+      "date": "May 2",
+      "sort_date": "20260502",
+      "url": "https://earmilk.com/2026/05/02/trypt-undone/",
+      "artwork": ""
+    },
+    {
+      "artist": "Tash Blake",
+      "song": "cologne",
+      "genre": "Dance Pop",
+      "date": "May 2",
+      "sort_date": "20260502",
+      "url": "https://earmilk.com/2026/05/02/tash-blake-cologne/",
+      "artwork": ""
+    },
+    {
+      "artist": "Madi Creecy",
+      "song": "she's a flower",
+      "genre": "Electronic",
+      "date": "May 2",
+      "sort_date": "20260502",
+      "url": "https://earmilk.com/2026/05/02/madi-creecy-shes-a-flower/",
+      "artwork": ""
+    },
+    {
+      "artist": "Lera Shemi",
+      "song": "call you by your namE",
+      "genre": "Alt-Pop",
+      "date": "May 2",
+      "sort_date": "20260502",
+      "url": "https://earmilk.com/2026/05/02/lera-shemi-call-you-by-your-name/",
+      "artwork": ""
+    },
     {
       "artist": "Bang Bang Jet Away",
       "song": "Mishima",
@@ -26,7 +62,7 @@
       "date": "May 1",
       "sort_date": "20260501",
       "url": "https://earmilk.com/2026/05/01/a-surreal-journey-through-sound-and-memory-peter-manning-robinsons-bent-out-of-shape-video/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/99/c0/46/99c04644-936d-5dc5-d60a-50f666f28d8b/823000121526.jpg/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "Love Spells",
@@ -35,7 +71,43 @@
       "date": "May 1",
       "sort_date": "20260501",
       "url": "https://earmilk.com/2026/05/01/love-always-comes-with-a-crutch-as-singer-love-spells-explains-in-his-new-single/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5e/ef/45/5eef451b-a1cf-8032-a91e-35bd4b6a512a/196874207833.jpg/400x400bb.jpg"
+      "artwork": ""
+    },
+    {
+      "artist": "Chatrooms",
+      "song": "Daydream",
+      "genre": "Rock",
+      "date": "May 1",
+      "sort_date": "20260501",
+      "url": "https://earmilk.com/2026/05/01/chatrooms-release-new-single-daydream/",
+      "artwork": ""
+    },
+    {
+      "artist": "Jonny Tex",
+      "song": "Mustard Seeds",
+      "genre": "Indie Rock",
+      "date": "May 1",
+      "sort_date": "20260501",
+      "url": "https://earmilk.com/2026/05/01/jonny-tex-mustard-seeds/",
+      "artwork": ""
+    },
+    {
+      "artist": "Ant Thomaz",
+      "song": "Gaia",
+      "genre": "Folk",
+      "date": "May 1",
+      "sort_date": "20260501",
+      "url": "https://earmilk.com/2026/05/01/ant-thomaz-gaia/",
+      "artwork": ""
+    },
+    {
+      "artist": "Angela Cook",
+      "song": "Mustard Seeds",
+      "genre": "Soul",
+      "date": "May 1",
+      "sort_date": "20260501",
+      "url": "https://earmilk.com/2026/05/01/angela-cook-mustard-seeds/",
+      "artwork": ""
     },
     {
       "artist": "Mishka",
@@ -71,7 +143,16 @@
       "date": "Apr 30",
       "sort_date": "20260430",
       "url": "https://earmilk.com/2026/04/30/bmt-reimagines-btss-swim-into-a-soulful-nashville-anthem-video/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b0/2a/c9/b02ac914-9bca-fb5b-28f2-50639b49b787/656465167095_cover.jpg/400x400bb.jpg"
+      "artwork": ""
+    },
+    {
+      "artist": "Odile Ohms",
+      "song": "Don't Give It Wings",
+      "genre": "Alt-Pop",
+      "date": "Apr 30",
+      "sort_date": "20260430",
+      "url": "https://earmilk.com/2026/04/30/odile-ohms-turns-inner-dialogue-into-alt-pop-reckoning-on-dont-give-it-wings/",
+      "artwork": ""
     },
     {
       "artist": "Tee Official",
@@ -80,7 +161,7 @@
       "date": "Apr 29",
       "sort_date": "20260429",
       "url": "https://earmilk.com/2026/04/29/tee-official-shares-unapologetic-track-sexyy-redd-in-to-you/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/79/aa/c4/79aac4e0-69dc-fcb0-e39a-abc6d3c62707/5218.jpg/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "Anna Blaise",
@@ -188,7 +269,7 @@
       "date": "Apr 28",
       "sort_date": "20260428",
       "url": "https://earmilk.com/2026/04/28/matthew-quinn/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/5c/c1/c4/5cc1c4ec-610e-7655-ebdd-7420a67904ef/749775746088.png/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "Kiki Kramer",
@@ -233,7 +314,7 @@
       "date": "Apr 27",
       "sort_date": "20260427",
       "url": "https://earmilk.com/2026/04/27/town-called-us-bring-real-life-chemistry-to-better-half/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/ba/47/47ba476b-a05b-3997-f3c3-cedd9ed407a2/1242326.jpg/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "InteliDey",
@@ -278,7 +359,7 @@
       "date": "Apr 6",
       "sort_date": "20260406",
       "url": "https://earmilk.com/2026/04/06/kevin-yang-shares-a-dance-pop-with-rb-vibes-in-turn-it-on/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/64/4e/50/644e509b-e2c1-8835-0128-b8ea38773f2d/artwork.jpg/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "Evan Fong",
@@ -314,7 +395,7 @@
       "date": "Mar 26",
       "sort_date": "20260326",
       "url": "https://earmilk.com/2026/03/26/tamarae-drops-new-single-tired-of-feeling/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/88/19/ac/8819ac40-e29f-0c48-dd74-a65d4179932e/artwork.jpg/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "Tamta",
@@ -323,7 +404,7 @@
       "date": "Mar 26",
       "sort_date": "20260326",
       "url": "https://earmilk.com/2026/03/26/tamta-turns-vulnerability-into-power-on-bold-new-single-autotapinosi/",
-      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e3/70/4f/e3704f2e-5a84-2b1f-668d-9c9902c093b4/26UMGIM24685.rgb.jpg/400x400bb.jpg"
+      "artwork": ""
     },
     {
       "artist": "L3TA",
