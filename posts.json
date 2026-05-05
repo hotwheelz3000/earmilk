@@ -1,6 +1,42 @@
 {
-  "updated": "May 5, 2026 01:23 PM PT",
+  "updated": "May 5, 2026 02:21 PM PT",
   "posts": [
+    {
+      "artist": "Bayonne",
+      "song": "Oxygen",
+      "genre": "Atmospheric",
+      "date": "May 5",
+      "sort_date": "20260505",
+      "url": "https://earmilk.com/2026/05/05/bayonne-brings-light-and-joy-with-new-single-oxygen/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/26/07/fb/2607fb40-54ae-0abe-30a2-4287713ec902/067003002783.png/400x400bb.jpg"
+    },
+    {
+      "artist": "JORDY",
+      "song": "DUMB",
+      "genre": "Alt-Pop",
+      "date": "May 5",
+      "sort_date": "20260505",
+      "url": "https://earmilk.com/2026/05/05/jordy-turns-up-for-some-stupid-fun-on-pop-banger-dumb/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d1/cb/43/d1cb43c6-b422-c21a-94a9-3be0a2caebd4/199316537697_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Boy Blu",
+      "song": "Eye of Desire",
+      "genre": "Alt-Pop",
+      "date": "May 5",
+      "sort_date": "20260505",
+      "url": "https://earmilk.com/2026/05/05/boy-blu-creates-a-danceable-alt-pop-confessional-on-debut-ep-eye-of-desire/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ae/c3/9b/aec39b6e-a002-d6fe-bff8-02968ee7810b/656465158109_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Amerado and",
+      "song": "Game Over",
+      "genre": "Afrobeats",
+      "date": "May 5",
+      "sort_date": "20260505",
+      "url": "https://earmilk.com/2026/05/05/amerado-and-fuse-odg-connect-for-vibrant-single-game-over/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/fc/8a/1f/fc8a1fbd-3d6b-9102-7c4b-55ad0b683d5b/0.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Fragile Animals",
       "song": "History",
