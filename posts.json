@@ -1,6 +1,42 @@
 {
-  "updated": "Jun 5, 2026 07:01 AM PT",
+  "updated": "Jun 5, 2026 09:00 AM PT",
   "posts": [
+    {
+      "artist": "Keller Leggett",
+      "song": "Calypso",
+      "genre": "Alternative",
+      "date": "Jun 5",
+      "sort_date": "20260605",
+      "url": "https://earmilk.com/2026/06/05/keller-leggetts-calypso-is-a-bitter-goodbye-to-unrequited-love/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/b2/2a/d4/b22ad460-71bc-6cf5-ae94-72df611e7a83/859715622300_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Morgara",
+      "song": "Desire",
+      "genre": "Alt-Pop",
+      "date": "Jun 5",
+      "sort_date": "20260605",
+      "url": "https://earmilk.com/2026/06/05/morgaras-debut-single-desire-is-an-ethereal-other-worldly-listen/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4e/23/36/4e2336f6-6d1b-2478-e005-d10d81864f96/859737344358_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Saraga",
+      "song": "No Time To Waste",
+      "genre": "Dance",
+      "date": "Jun 5",
+      "sort_date": "20260605",
+      "url": "https://earmilk.com/2026/06/05/saraga-announces-debut-album-mirrors-releases-new-single-no-time-to-waste/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/08/c6/03/08c60325-8939-1f94-1d20-178579c4a5c2/cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Aidan Leclaire",
+      "song": "Lucy",
+      "genre": "Indie",
+      "date": "Jun 5",
+      "sort_date": "20260605",
+      "url": "https://earmilk.com/2026/06/05/aidan-leclaire-captures-something-bittersweet-on-new-single-lucy/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6a/df/94/6adf9435-f3fd-7859-792d-b07b518a6dca/823000551958.png/400x400bb.jpg"
+    },
     {
       "artist": "Jayadi",
       "song": "Scars",
