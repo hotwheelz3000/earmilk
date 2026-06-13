@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import json
 import re
 import time
+import html
 from datetime import datetime, timezone, timedelta
 
 FEED_PAGES = [
@@ -20,7 +21,7 @@ def fetch_url(url, timeout=10):
         return resp.read().decode('utf-8')
 
 def itunes_lookup(artist, song):
-    # Returns (artwork_url, genre) from the best iTunes match.
+    # Returns (artwork_url, genre, itunes_artist, itunes_track) from the best match.
     for q in [artist + ' ' + song, song + ' ' + artist, artist, song]:
         if not q.strip():
             continue
@@ -38,12 +39,14 @@ def itunes_lookup(artist, song):
             if chosen:
                 art = chosen.get('artworkUrl100', '').replace('100x100bb', '400x400bb')
                 genre = chosen.get('primaryGenreName', '')
+                iartist = chosen.get('artistName', '')
+                itrack = chosen.get('trackName', '')
                 if art or genre:
-                    return art, genre
+                    return art, genre, iartist, itrack
         except Exception as e:
             print('iTunes error: ' + str(e))
         time.sleep(0.3)
-    return '', ''
+    return '', '', '', ''
 
 def artwork_from_musicbrainz(artist, song):
     try:
@@ -70,15 +73,24 @@ def artwork_from_musicbrainz(artist, song):
     return ''
 
 def fetch_meta(artist, song):
-    # One iTunes call gives both artwork and a fallback genre.
-    art, genre = itunes_lookup(artist, song)
+    # One iTunes call gives artwork, a fallback genre, and canonical names.
+    art, genre, iartist, itrack = itunes_lookup(artist, song)
     if not art and artist and song:
         art = artwork_from_musicbrainz(artist, song)
-    return art, genre
+    return art, genre, iartist, itrack
 
 def fetch_artwork(artist, song):
-    art, _ = fetch_meta(artist, song)
-    return art
+    return fetch_meta(artist, song)[0]
+
+def _norm(s):
+    return re.sub(r'[^a-z0-9]', '', (s or '').lower())
+
+def titles_match(a, b):
+    na, nb = _norm(a), _norm(b)
+    if not na or not nb:
+        return False
+    # equal, or one is contained in the other (handles "(Remix)" / feat. suffixes)
+    return na == nb or (len(na) >= 4 and len(nb) >= 4 and (na in nb or nb in na))
 
 VERBS = (
     r'shares?|releases?|drops?|returns?|delivers?|unveils?|presents?|'
@@ -261,6 +273,16 @@ def clean_artist(artist, song=''):
     # 'With "Song," Artist ...' -> keep what follows the comma
     elif a.lower().startswith('with ') and ',' in a:
         a = a.split(',')[-1].strip()
+    # Leaked descriptor: '<desc> group/duo/artist/act <Name>' -> keep the Name.
+    # Requires text before the role word and a short name after it, so real
+    # names ending in Band/Project (e.g. 'Windrift Band') are untouched.
+    desc = re.match(
+        r'^.+?\s+(?:act|group|duo|trio|artist|singer|songwriter|rapper|'
+        r'producer|collective|outfit|musician)\s+(.+)$', a, re.IGNORECASE)
+    if desc:
+        rest = desc.group(1).strip()
+        if 1 <= len(rest.split()) <= 4:
+            a = rest
     # Still sentence-like? Salvage the leading capitalized name run instead.
     if len(a.split()) > 6:
         salvaged = _leading_name(a)
@@ -277,32 +299,107 @@ def clean_artist(artist, song=''):
         return ''
     return a
 
-def clean_genre(genre):
-    g = (genre or '').strip()
+def clean_genre(genre, artist='', song=''):
+    g = html.unescape((genre or '').strip())   # R&amp;B -> R&B
     if g.lower() in BAD_GENRES:
         return ''
     # Real genres are short; a long phrase is a mis-tagged title/sentence
     if len(g.split()) > 3:
         return ''
+    # A "genre" that just echoes the artist or song is a leaked tag, not a genre
+    if g and g.lower() in (artist.lower(), song.lower()):
+        return ''
     return g
 
 
+def artist_from_slug(url, song=''):
+    # Last-resort artist recovery: Earmilk URLs start with the artist name,
+    # e.g. /2026/06/12/walkupslimey-expands-his-vision-on-... -> "Walkupslimey".
+    m = re.search(r'/20\d{2}/\d{2}/\d{2}/([a-z0-9\-]+)', url)
+    if not m:
+        return ''
+    words = m.group(1).split('-')
+    stop = {
+        'shares', 'share', 'releases', 'release', 'drops', 'drop', 'returns',
+        'delivers', 'deliver', 'unveils', 'presents', 'announces', 'debuts',
+        'explores', 'reveals', 'offers', 'brings', 'gives', 'gets', 'makes',
+        'takes', 'shows', 'turns', 'finds', 'expands', 'soars', 'ignites',
+        'embraces', 'paints', 'navigates', 'confronts', 'celebrates', 'taps',
+        'reinvents', 'unite', 'unites', 'defines', 'refuses', 'translates',
+        'reflects', 'blends', 'captures', 'crafts', 'creates', 'with', 'by',
+        'on', 'the', 'a', 'an', 'is', 'new', 'feat', 'ft', 'and',
+    }
+    name = []
+    for w in words:
+        if w in stop:
+            break
+        name.append(w)
+        if len(name) >= 4:
+            break
+    if not name:
+        return ''
+    cand = ' '.join(name)
+    # Don't echo the song back as the artist
+    if song and cand.lower() == song.lower():
+        return ''
+    # Preserve all-caps/stylized tokens; title-case ordinary words
+    return ' '.join(w if (w.isupper() or any(c.isdigit() for c in w)) else w.capitalize()
+                    for w in name)
+
+
+def flag_suspicious(artist, song, genre):
+    # Returns a reason string if a finished post still looks mis-parsed, else ''.
+    a = artist or ''
+    reasons = []
+    if re.search(r'[\u201c\u201d"]', a):
+        reasons.append('artist has a quote')
+    if re.search(r'\bby\b', a, re.IGNORECASE):
+        reasons.append('artist contains "by"')
+    if re.match(r'^.+?\s+(?:act|group|duo|trio|artist|singer|songwriter|rapper|'
+                r'producer|collective|outfit|musician)\s+\S', a, re.IGNORECASE):
+        reasons.append('artist looks like a descriptor phrase')
+    if len(a.split()) > 5:
+        reasons.append('artist is unusually long')
+    if (song or '').strip().endswith((',', ';', ':')):
+        reasons.append('song ends in stray punctuation')
+    if genre and genre.lower() in (a.lower(), (song or '').lower()):
+        reasons.append('genre echoes artist/song')
+    return '; '.join(reasons)
+
+
+def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, date, sort_date, url):
     if url in url_to_post:
         return False
     song = clean_song(song)
     artist = clean_artist(artist, song)
-    genre = clean_genre(genre)
+    genre = clean_genre(genre, artist, song)
+    # Auto-repair: if the artist still looks mis-parsed, recover it from the URL.
+    if flag_suspicious(artist, song, genre):
+        slug_artist = artist_from_slug(url, song)
+        if slug_artist and not flag_suspicious(slug_artist, song, genre):
+            print('  AUTO-FIXED artist: ' + repr(artist) + ' -> ' + repr(slug_artist) +
+                  ' (from URL)')
+            artist = slug_artist
+            genre = clean_genre(genre, artist, song)
     if not artist or not song:
         print('  SKIPPED (no artist/song): ' + url)
         return False
+    artwork, itunes_genre, itunes_artist, itunes_track = fetch_meta(artist, song)
+    # Auto-fix: if the parsed artist looks mis-parsed and iTunes found the same
+    # track, trust iTunes' canonical artist name (gated on a song-title match).
+    if flag_suspicious(artist, song, genre) and itunes_artist and titles_match(itunes_track, song):
+        candidate = clean_artist(itunes_artist, song)
+        if candidate and not flag_suspicious(candidate, song, genre):
+            print('  AUTO-FIX: artist ' + repr(artist) + ' -> ' + repr(candidate) + ' (iTunes)')
+            artist = candidate
+            genre = clean_genre(genre, artist, song)
+    # Earmilk had no real genre tag -> fall back to iTunes' genre
+    if not genre and itunes_genre:
+        genre = clean_genre(itunes_genre, artist, song)
     song_key = artist.lower() + '|' + song.lower()
     if song_key in song_to_post:
         print('  DUPLICATE SKIPPED: ' + artist + ' - ' + song)
         return False
-    artwork, itunes_genre = fetch_meta(artist, song)
-    # Earmilk had no real genre tag -> fall back to iTunes' genre
-    if not genre and itunes_genre:
-        genre = clean_genre(itunes_genre)
     new_post = {
         'artist': artist,
         'song': song,
@@ -316,6 +413,10 @@ def clean_genre(genre):
     url_to_post[url] = new_post
     song_to_post[song_key] = new_post
     print('ADDED: ' + artist + ' - ' + song)
+    reason = flag_suspicious(artist, song, genre)
+    if reason:
+        print('  WARN: still looks off after auto-fix (' + reason + ') -> ' +
+              repr(artist) + ' / ' + repr(song) + ' / ' + repr(genre) + ' | ' + url)
     return True
 
 def scrape_archive_page(url, url_to_post, song_to_post, existing_posts):
