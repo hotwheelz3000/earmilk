@@ -19,7 +19,8 @@ def fetch_url(url, timeout=10):
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read().decode('utf-8')
 
-def artwork_from_itunes(artist, song):
+def itunes_lookup(artist, song):
+    # Returns (artwork_url, genre) from the best iTunes match.
     for q in [artist + ' ' + song, song + ' ' + artist, artist, song]:
         if not q.strip():
             continue
@@ -27,19 +28,22 @@ def artwork_from_itunes(artist, song):
             url = 'https://itunes.apple.com/search?term=' + urllib.parse.quote(q.strip()) + '&media=music&limit=5&entity=song'
             data = json.loads(fetch_url(url))
             results = data.get('results', [])
+            chosen = None
             for r in results:
                 if artist and artist.lower() in r.get('artistName', '').lower():
-                    art = r.get('artworkUrl100', '').replace('100x100bb', '400x400bb')
-                    if art:
-                        return art
-            if results:
-                art = results[0].get('artworkUrl100', '').replace('100x100bb', '400x400bb')
-                if art:
-                    return art
+                    chosen = r
+                    break
+            if chosen is None and results:
+                chosen = results[0]
+            if chosen:
+                art = chosen.get('artworkUrl100', '').replace('100x100bb', '400x400bb')
+                genre = chosen.get('primaryGenreName', '')
+                if art or genre:
+                    return art, genre
         except Exception as e:
             print('iTunes error: ' + str(e))
         time.sleep(0.3)
-    return ''
+    return '', ''
 
 def artwork_from_musicbrainz(artist, song):
     try:
@@ -65,13 +69,16 @@ def artwork_from_musicbrainz(artist, song):
     time.sleep(0.5)
     return ''
 
+def fetch_meta(artist, song):
+    # One iTunes call gives both artwork and a fallback genre.
+    art, genre = itunes_lookup(artist, song)
+    if not art and artist and song:
+        art = artwork_from_musicbrainz(artist, song)
+    return art, genre
+
 def fetch_artwork(artist, song):
-    art = artwork_from_itunes(artist, song)
-    if art:
-        return art
-    if artist and song:
-        return artwork_from_musicbrainz(artist, song)
-    return ''
+    art, _ = fetch_meta(artist, song)
+    return art
 
 VERBS = (
     r'shares?|releases?|drops?|returns?|delivers?|unveils?|presents?|'
@@ -284,7 +291,10 @@ def clean_genre(genre):
     if song_key in song_to_post:
         print('  DUPLICATE SKIPPED: ' + artist + ' - ' + song)
         return False
-    artwork = fetch_artwork(artist, song)
+    artwork, itunes_genre = fetch_meta(artist, song)
+    # Earmilk had no real genre tag -> fall back to iTunes' genre
+    if not genre and itunes_genre:
+        genre = clean_genre(itunes_genre)
     new_post = {
         'artist': artist,
         'song': song,
