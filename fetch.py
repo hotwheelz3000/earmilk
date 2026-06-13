@@ -80,7 +80,10 @@ VERBS = (
     r'links?\s+up|teams?\s+up|gets?|makes?|takes?|shows?|'
     r'moves?|rebuilds?|slingshots?|lights?\s+up|'
     r'captures?|crafts?|creates?|blends?|fuses?|mixes?|'
-    r'turns?|reclaims?|reimagines?|pushes?|reflects?|deals?|finds?|chats?'
+    r'turns?|reclaims?|reimagines?|pushes?|reflects?|deals?|finds?|chats?|'
+    r'expands?|soars?|ignites?|embraces?|paints?|navigates?|confronts?|'
+    r'celebrates?|honors?|taps?|enlists?|recruits?|unleashes?|serves?|'
+    r'premieres?|opens?|sets?|drops?|teases?|previews?|spotlights?'
 )
 
 def parse_headline(headline):
@@ -168,30 +171,112 @@ def parse_sort_date(date_str):
         dt = datetime.strptime(date_str[:25], '%a, %d %b %Y %H:%M:%S')
         return dt.strftime('%Y%m%d')
     except Exception:
-        return '20260101'
+        return datetime.now().strftime('%Y') + '0101'
 
 def display_to_sort(display_date):
     try:
-        dt = datetime.strptime(display_date + ' 2026', '%b %d %Y')
+        year = datetime.now().year
+        dt = datetime.strptime(display_date + ' ' + str(year), '%b %d %Y')
+        # A display date with no year that lands in the future is from last year
+        if dt.date() > datetime.now().date():
+            dt = dt.replace(year=year - 1)
         return dt.strftime('%Y%m%d')
     except Exception:
-        return '20260101'
+        return datetime.now().strftime('%Y') + '0101'
 
 def get_genre(categories):
-    skip = {'new music', 'music', 'news', 'featured', 'mainstage', 'music videos'}
+    skip = {
+        'new music', 'music', 'news', 'featured', 'mainstage', 'music videos',
+        'feature', 'features', 'album reviews', 'album review', 'reviews',
+        'premiere', 'premieres', 'exclusive', 'exclusives', 'uncategorized',
+        'interview', 'interviews', 'editorial', 'list', 'lists', 'playlist',
+        'playlists', 'video', 'videos', 'cinematic'
+    }
     for c in categories:
         if c.lower() not in skip:
             return c
-    return categories[0] if categories else ''
+    # Everything was a post-type, not a real genre -> leave blank
+    return ''
 
 def get_archive_urls(html):
-    pattern = r'https://earmilk\.com/2026/\d{2}/\d{2}/[a-z0-9\-]+/'
+    pattern = r'https://earmilk\.com/20\d{2}/\d{2}/\d{2}/[a-z0-9\-]+/'
     urls = re.findall(pattern, html)
     return list(dict.fromkeys(urls))
 
-def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, date, sort_date, url):
+BAD_GENRES = {
+    'new music', 'music', 'news', 'featured', 'mainstage', 'music videos',
+    'feature', 'features', 'album reviews', 'album review', 'reviews',
+    'premiere', 'premieres', 'exclusive', 'exclusives', 'uncategorized',
+    'interview', 'interviews', 'editorial', 'list', 'lists', 'playlist',
+    'playlists', 'video', 'videos', 'cinematic'
+}
+
+def clean_song(song):
+    s = (song or '').strip()
+    # strip surrounding quotes
+    s = s.strip('\u201c\u201d"\'')
+    # strip trailing punctuation like a stray comma/period from a sentence
+    s = re.sub(r'[\s,;:.\u2014\-]+$', '', s)
+    s = s.strip()
+    return s
+
+def _leading_name(text):
+    # Pull the leading run of Capitalized / ALL-CAPS words (an artist name)
+    # up to the first lowercase word (usually the verb).
+    tokens = text.split()
+    name = []
+    connectors = {'&', 'x', '+', 'and', 'feat.', 'feat', 'ft.', 'ft'}
+    for t in tokens:
+        bare = t.strip('\u201c\u201d"\'.,')
+        if not bare:
+            break
+        if t.lower() in connectors:
+            name.append('&' if t.lower() in {'&', 'and'} else t)
+            continue
+        # Capitalized word, ALL-CAPS, or a name with apostrophe-s
+        if bare[0].isupper():
+            name.append(t)
+        else:
+            break
+    return ' '.join(name).strip()
+
+def clean_artist(artist, song=''):
+    a = (artist or '').strip()
+    # If the whole sentence got captured, cut it at the first action verb
+    m = re.match(r'^(.+?)\s+(?:' + VERBS + r')\b', a, re.IGNORECASE)
+    if m:
+        a = m.group(1).strip()
+    # Still sentence-like? Salvage the leading capitalized name run instead.
+    if len(a.split()) > 6:
+        salvaged = _leading_name(a)
+        if salvaged and len(salvaged.split()) <= 6:
+            a = salvaged
+    a = re.sub(r'[\u2019\']s?\s*$', '', a).strip()
+    a = re.sub(r'[,;:]+$', '', a).strip()
+    a = a.strip('\u201c\u201d"\'')
+    if len(a.split()) > 6:
+        return ''
+    # A lone function word means we captured a sentence start, not a name
+    if a.lower() in {'this', 'that', 'the', 'a', 'an', 'i', 'we', 'he', 'she',
+                     'they', 'it', 'my', 'our', 'his', 'her', 'their', 'on'}:
+        return ''
+    return a
+
+def clean_genre(genre):
+    g = (genre or '').strip()
+    if g.lower() in BAD_GENRES:
+        return ''
+    # Real genres are short; a long phrase is a mis-tagged title/sentence
+    if len(g.split()) > 3:
+        return ''
+    return g
+
+
     if url in url_to_post:
         return False
+    song = clean_song(song)
+    artist = clean_artist(artist, song)
+    genre = clean_genre(genre)
     if not artist or not song:
         print('  SKIPPED (no artist/song): ' + url)
         return False
@@ -231,7 +316,7 @@ def scrape_archive_page(url, url_to_post, song_to_post, existing_posts):
                     continue
                 headline = title_match.group(1).strip()
                 date_match = re.search(r'"datePublished":"(\d{4}-\d{2}-\d{2})', art_html)
-                sort_date = date_match.group(1).replace('-', '') if date_match else '20260101'
+                sort_date = date_match.group(1).replace('-', '') if date_match else datetime.now().strftime('%Y') + '0101'
                 try:
                     month_day = datetime.strptime(sort_date, '%Y%m%d').strftime('%b %-d')
                 except Exception:
@@ -328,7 +413,7 @@ def main():
         total_added += added
         time.sleep(1)
 
-    existing_posts.sort(key=lambda p: p.get('sort_date', '20260101'), reverse=True)
+    existing_posts.sort(key=lambda p: p.get('sort_date') or '00000000', reverse=True)
     out = {
         'updated': datetime.now(timezone(timedelta(hours=-7))).strftime('%b %-d, %Y %I:%M %p PT'),
         'posts': existing_posts
