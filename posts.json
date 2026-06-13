@@ -1,8 +1,8 @@
 {
-  "updated": "Jun 12, 2026 08:06 PM PT",
+  "updated": "Jun 12, 2026 06:43 PM PT",
   "posts": [
     {
-      "artist": "UNTER STR\u00d8M",
+      "artist": "UNTER STRØM",
       "song": "Fold",
       "genre": "Dance",
       "date": "Jun 12",
@@ -38,7 +38,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/07/32/50/073250a5-de62-15b5-6754-94ad40770f64/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\u201cBlack Ice\u201d",
+      "artist": "Black Ice",
       "song": "Black Ice",
       "genre": "Alt-Pop",
       "date": "Jun 12",
@@ -76,7 +76,7 @@
     {
       "artist": "Captain Iron & Windrift Band",
       "song": "Summer Rain",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 10",
       "sort_date": "20260610",
       "url": "https://earmilk.com/2026/06/10/captain-iron-and-windrift-band-turn-fleeting-romance-into-reggae-gold-on-summer-rain/",
@@ -156,7 +156,7 @@
     },
     {
       "artist": "DJ Matrix aka House Of Neo",
-      "song": "Drift Away,",
+      "song": "Drift Away",
       "genre": "Electronic",
       "date": "Jun 8",
       "sort_date": "20260608",
@@ -166,7 +166,7 @@
     {
       "artist": "Arctic Wave",
       "song": "Roll Together",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/arctic-wave-blends-heartfelt-commitment-and-retro-funk-charm-on-roll-together/",
@@ -174,17 +174,17 @@
     },
     {
       "artist": "Last Letters",
-      "song": "It\u2019s a Shame",
-      "genre": "Feature",
+      "song": "It’s a Shame",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/last-letters-captures-early-2000s-heartache-and-energy-on-new-single-its-a-shame/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Features124/v4/97/35/c0/9735c035-4fd5-70d4-42fa-abaef7873c4e/dj.bjlwqkxx.jpg/400x400bb.jpg"
     },
     {
-      "artist": "LEAVETHISTOWN reinvents a country favorite with a fresh",
+      "artist": "LEAVETHISTOWN",
       "song": "Wagon Wheel",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/leavethistown-reinvents-a-country-favorite-with-a-fresh-take-on-wagon-wheel/",
@@ -193,7 +193,7 @@
     {
       "artist": "Mai Mai",
       "song": "Why Me?",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/mai-mai-turns-vulnerability-into-a-dreamy-pop-reflection-on-why-me/",
@@ -202,7 +202,7 @@
     {
       "artist": "Every Other Weekend",
       "song": "Resolution",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/every-other-weekend-finds-beauty-in-simplicity-on-new-single-resolution/",
@@ -211,7 +211,7 @@
     {
       "artist": "Piper Connolly",
       "song": "beautiful life",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/piper-connolly-captures-the-magic-of-young-love-on-the-addictive-new-single-beautiful-life/",
@@ -220,7 +220,7 @@
     {
       "artist": "Kitty O'Neal",
       "song": "Headspace",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/kitty-oneal-finds-beauty-in-emotional-distance-on-haunting-new-single-headspace/",
@@ -237,7 +237,7 @@
     },
     {
       "artist": "Rachel Bochner",
-      "song": "Happier You\u2019re Gone (SASE)",
+      "song": "Happier You’re Gone (SASE)",
       "genre": "Indie Pop",
       "date": "Jun 8",
       "sort_date": "20260608",
@@ -245,9 +245,9 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c8/79/c4/c879c493-2e6a-c47f-5e01-4a2750e7e548/632665345853_Cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Walkupslimey expands his vision on \u201cFree Walkup,\u201d a cinematic",
-      "song": "Free Walkup,",
-      "genre": "Feature",
+      "artist": "Walkupslimey",
+      "song": "Free Walkup",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/walkupslimey-expands-his-vision-on-free-walkup-a-cinematic-blend-of-hustle-heart-and-energy/",
@@ -273,8 +273,8 @@
     },
     {
       "artist": "Desarae Dee",
-      "song": "Telephone\u2026.Wait",
-      "genre": "New Music",
+      "song": "Telephone….Wait",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/desarae-dee-shares-poignant-and-expressive-single-telephone-wait/",
@@ -310,7 +310,7 @@
     {
       "artist": "FRENCH INHALER",
       "song": "TV LOVE",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 8",
       "sort_date": "20260608",
       "url": "https://earmilk.com/2026/06/08/french-inhaler-captures-modern-isolation-on-the-addictive-new-single-tv-love/",
@@ -373,7 +373,7 @@
     {
       "artist": "MAX RAD",
       "song": "a love letter",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "Jun 5",
       "sort_date": "20260605",
       "url": "https://earmilk.com/2026/06/05/max-rads-a-love-letter-is-a-lesson-in-production-perfection-album-review/",
@@ -425,8 +425,8 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5a/a8/25/5aa82540-7f1c-5e29-9de5-94760f207617/16098.jpg/400x400bb.jpg"
     },
     {
-      "artist": "SerGo & Ofri Afek unite on \"Farewell Song,\" a fusion of past and",
-      "song": "Farewell Song,",
+      "artist": "SerGo & Ofri Afek",
+      "song": "Farewell Song",
       "genre": "Alt-Pop",
       "date": "Jun 3",
       "sort_date": "20260603",
@@ -454,7 +454,7 @@
     {
       "artist": "Toby Gad & Hana Effron",
       "song": "My Love For You Will Stay",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 3",
       "sort_date": "20260603",
       "url": "https://earmilk.com/2026/06/03/toby-gad-and-hana-effron-craft-an-emotional-masterpiece-on-my-love-for-you-will-stay/",
@@ -463,7 +463,7 @@
     {
       "artist": "French Dogs",
       "song": "Here's to Pretending",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "Jun 3",
       "sort_date": "20260603",
       "url": "https://earmilk.com/2026/06/03/french-dogs-capture-emotion-and-intimacy-through-new-album-heres-to-pretending/",
@@ -472,14 +472,14 @@
     {
       "artist": "Laura Sumner",
       "song": "Purple Raging Flower",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 3",
       "sort_date": "20260603",
       "url": "https://earmilk.com/2026/06/03/laura-sumner-turns-love-loss-and-hope-into-a-captivating-journey-with-purple-raging-flower-ep/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7c/0a/22/7c0a2277-0f78-c1c2-7b1b-14e8ffcb0d0b/199891721399_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Gimme (One Thing)\"",
+      "artist": "Gimme (One Thing)",
       "song": "Gimme (One Thing)",
       "genre": "Alternative Rock",
       "date": "Jun 3",
@@ -517,7 +517,7 @@
     {
       "artist": "Carlotta Schmidt",
       "song": "Overthinker",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/carlotta-schmidt-steps-fully-into-her-artistic-identity-with-overthinker/",
@@ -526,7 +526,7 @@
     {
       "artist": "Dayfiction",
       "song": "Divine Intermission",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/dayfiction-finds-beauty-in-chaos-on-the-powerful-new-ep-divine-intermission/",
@@ -535,7 +535,7 @@
     {
       "artist": "Gab Gordon",
       "song": "Slowburn",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/gab-gordon-captures-the-beauty-of-gradual-connection-on-slowburn/",
@@ -544,7 +544,7 @@
     {
       "artist": "Sahej",
       "song": "Prayer",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/sahej-finds-strength-in-vulnerability-on-the-reflective-new-single-prayer/",
@@ -553,7 +553,7 @@
     {
       "artist": "J'Wells",
       "song": "The Night Is Long",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/jwells-explores-lifes-quiet-battles-on-the-powerful-new-release-the-night-is-long/",
@@ -562,7 +562,7 @@
     {
       "artist": "Lonely Gimmick",
       "song": "Warmer Days and Sunny Skies",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/lonely-gimmick-returns-with-a-soulful-uplifting-gem-warmer-days-and-sunny-skies/",
@@ -571,7 +571,7 @@
     {
       "artist": "Jonah Connock",
       "song": "I Kept Your Secret, Saoirse",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/jonah-connock-delivers-a-story-of-love-loss-and-resilience-through-i-kept-your-secret-saoirse-album/",
@@ -579,8 +579,8 @@
     },
     {
       "artist": "With \"Stoned,\" NMDA & Isabelle Rose",
-      "song": "Stoned,",
-      "genre": "Feature",
+      "song": "Stoned",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/with-stoned-nmda-isabelle-rose-deliver-a-cinematic-exploration-of-trauma-and-human-cycles/",
@@ -589,16 +589,16 @@
     {
       "artist": "Symonne",
       "song": "The Way You Love",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/symonne-explores-memory-growth-and-connection-on-rb-gem-the-way-you-love/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/d2/81/53/d281539a-05d9-c2c0-8c7e-457cab47ed7b/mzi.ltpnekph.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Elare Andr\u00e9 redefines pop expression and",
+      "artist": "Elare André redefines pop expression and",
       "song": "MUSIC FOR ALL OCCASIONS",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/elare-andre-redefines-pop-expression-and-makes-a-lasting-statement-with-music-for-all-occasions-album/",
@@ -607,7 +607,7 @@
     {
       "artist": "Peter DiMaggio",
       "song": "Chasing a Trace",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 2",
       "sort_date": "20260602",
       "url": "https://earmilk.com/2026/06/02/peter-dimaggio-captures-the-art-of-letting-go-on-new-single-chasing-a-trace/",
@@ -632,7 +632,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a8/a3/da/a8a3daba-c214-0f07-c326-7630a69c8669/cover_4062851284349.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"La Revanche\"",
+      "artist": "La Revanche",
       "song": "La Revanche",
       "genre": "Alternative Rock",
       "date": "Jun 1",
@@ -652,7 +652,7 @@
     {
       "artist": "Leaone",
       "song": "My Lover Threw Me Under A Bus",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 1",
       "sort_date": "20260601",
       "url": "https://earmilk.com/2026/06/01/leaone-blends-memory-and-isolation-into-a-statement-on-my-lover-threw-me-under-a-bus/",
@@ -706,7 +706,7 @@
     {
       "artist": "Samantha LaPorta",
       "song": "Flora-Bama",
-      "genre": "Feature",
+      "genre": "",
       "date": "Jun 1",
       "sort_date": "20260601",
       "url": "https://earmilk.com/2026/06/01/samantha-laporta-turns-memory-into-a-living-atmosphere-on-flora-bama/",
@@ -715,7 +715,7 @@
     {
       "artist": "Bank Holiday",
       "song": "Out Of The Blue",
-      "genre": "New Music",
+      "genre": "",
       "date": "Jun 1",
       "sort_date": "20260601",
       "url": "https://earmilk.com/2026/06/01/bank-holiday-shares-bold-and-radiant-debut-single-out-of-the-blue/",
@@ -751,7 +751,7 @@
     {
       "artist": "Geonny",
       "song": "Broken Names (Live)",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 29",
       "sort_date": "20260529",
       "url": "https://earmilk.com/2026/05/29/geonny-captures-the-power-of-brotherhood-on-broken-names-live/",
@@ -859,7 +859,7 @@
     {
       "artist": "Roman Ceglov",
       "song": "Fight",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 27",
       "sort_date": "20260527",
       "url": "https://earmilk.com/2026/05/27/roman-ceglov-shares-raw-emotion-and-vintage-grit-on-new-single-fight/",
@@ -877,7 +877,7 @@
     {
       "artist": "ferb",
       "song": "Provence",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 27",
       "sort_date": "20260527",
       "url": "https://earmilk.com/2026/05/27/ferb-turns-heartbreak-into-a-cinematic-storm-on-provence-premiere/",
@@ -886,7 +886,7 @@
     {
       "artist": "Beljune",
       "song": "White Heat",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 27",
       "sort_date": "20260527",
       "url": "https://earmilk.com/2026/05/27/beljune-turns-vintage-film-inspiration-into-pure-fire-on-white-heat/",
@@ -903,7 +903,7 @@
     },
     {
       "artist": "Angry Joe & the Holy Socks",
-      "song": "I\u2019ll Run Away",
+      "song": "I’ll Run Away",
       "genre": "Indie",
       "date": "May 27",
       "sort_date": "20260527",
@@ -929,7 +929,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5f/0d/ce/5f0dce68-7d9b-f843-f894-064cd1a3516f/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "N\u00c6 & Blizz",
+      "artist": "NÆ & Blizz",
       "song": "Anti-Gravity",
       "genre": "Pop",
       "date": "May 26",
@@ -939,8 +939,8 @@
     },
     {
       "artist": "Daphne Parker Powell",
-      "song": "The Death of Cool,",
-      "genre": "Feature",
+      "song": "The Death of Cool",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/daphne-parker-powell-turns-pain-into-power-on-the-death-of-cool-a-bold-new-album-review/",
@@ -949,7 +949,7 @@
     {
       "artist": "Michelle Sara",
       "song": "Like a Thief",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/michelle-saras-like-a-thief-delivers-emotional-alt-pop-storytelling/",
@@ -957,8 +957,8 @@
     },
     {
       "artist": "The Buddyrevelles",
-      "song": "Make the Dings Louder,",
-      "genre": "Feature",
+      "song": "Make the Dings Louder",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/the-buddyrevelles-return-with-make-the-dings-louder-from-their-project-the-conviction/",
@@ -967,7 +967,7 @@
     {
       "artist": "LIPFORD",
       "song": "THE MUSIC",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/lipford-finds-strength-in-sound-on-the-music-featuring-neverhush/",
@@ -976,7 +976,7 @@
     {
       "artist": "Gejo",
       "song": "Callous",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/gejo-finds-beauty-in-the-shadows-on-haunting-new-release-callous/",
@@ -985,7 +985,7 @@
     {
       "artist": "INDOLORE",
       "song": "Terry",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/indolore-turns-reflection-into-resonance-on-the-hauntingly-beautiful-terry/",
@@ -994,7 +994,7 @@
     {
       "artist": "Fierce Friend",
       "song": "Make Me Forget You",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/fierce-friend-turn-emotional-chaos-into-an-addictive-alt-pop-rush-on-make-me-forget-you/",
@@ -1021,14 +1021,14 @@
     {
       "artist": "UNDAUNTED",
       "song": "Out of Reach",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/undaunted-turns-pain-into-power-on-emotionally-charged-new-single-out-of-reach/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/79/b7/2d/79b72de0-84cf-42c1-81c7-3b2ba624bed2/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\u201cHow You Like It?\u201d by Rashaann",
+      "artist": "How You Like It?” by Rashaann",
       "song": "How You Like It?",
       "genre": "Electronic",
       "date": "May 25",
@@ -1037,9 +1037,9 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9d/4e/ce/9d4eced7-09c1-0f54-318b-64e53eade781/193436261883.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\u201cMy Sun\u201d by Mishell Ivon",
+      "artist": "My Sun” by Mishell Ivon",
       "song": "My Sun",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 25",
       "sort_date": "20260525",
       "url": "https://earmilk.com/2026/05/25/my-sun-by-mishell-ivon-turns-love-into-light-featuring-jerome-brooks-jr-and-leyla-romanova/",
@@ -1074,7 +1074,7 @@
     },
     {
       "artist": "SOMYO",
-      "song": "WHISPERS,",
+      "song": "WHISPERS",
       "genre": "Electronic",
       "date": "May 23",
       "sort_date": "20260523",
@@ -1084,7 +1084,7 @@
     {
       "artist": "Lana Crow",
       "song": "Ten Days to Lose a Guy",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 22",
       "sort_date": "20260522",
       "url": "https://earmilk.com/2026/05/22/lana-crow-turns-heartbreak-humor-into-pop-rock-gold-on-ten-days-to-lose-a-guy/",
@@ -1093,7 +1093,7 @@
     {
       "artist": "Symeon",
       "song": "Heroes",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 22",
       "sort_date": "20260522",
       "url": "https://earmilk.com/2026/05/22/symeon-turns-the-spotlight-inward-on-new-single-heroes/",
@@ -1128,7 +1128,7 @@
     },
     {
       "artist": "Ashavari",
-      "song": "I Wish I Was A.I.",
+      "song": "I Wish I Was A.I",
       "genre": "Alt-Pop",
       "date": "May 22",
       "sort_date": "20260522",
@@ -1145,7 +1145,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/21/5d/eb/215deb2e-08a5-1574-fda7-0c7621e34c04/5063961234414_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "S\u00e9maj",
+      "artist": "Sémaj",
       "song": "Love Ain't Fair",
       "genre": "Indie",
       "date": "May 22",
@@ -1165,7 +1165,7 @@
     {
       "artist": "[Premiere] Virak",
       "song": "Where It All Begins",
-      "genre": "Premiere",
+      "genre": "",
       "date": "May 21",
       "sort_date": "20260521",
       "url": "https://earmilk.com/2026/05/21/premiere-virak-shares-haunting-yet-ethereal-single-where-it-all-begins-from-re-release-album-threads/",
@@ -1201,7 +1201,7 @@
     {
       "artist": "Martin Kuiper",
       "song": "Time",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 20",
       "sort_date": "20260520",
       "url": "https://earmilk.com/2026/05/20/martin-kuiper-returns-with-his-latest-rock-release-time/",
@@ -1210,7 +1210,7 @@
     {
       "artist": "Reetoxa",
       "song": "War Killer",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 20",
       "sort_date": "20260520",
       "url": "https://earmilk.com/2026/05/20/reetoxas-war-killer-turns-punk-rock-energy-into-a-powerful-message-of-unity/",
@@ -1228,7 +1228,7 @@
     {
       "artist": "BLOCK",
       "song": "Love Crash",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 20",
       "sort_date": "20260520",
       "url": "https://earmilk.com/2026/05/20/block-returns-with-heart-and-honesty-on-love-crash/",
@@ -1245,8 +1245,8 @@
     },
     {
       "artist": "Ivelisse del Carmen",
-      "song": "Before I\u2019m Done",
-      "genre": "Feature",
+      "song": "Before I’m Done",
+      "genre": "",
       "date": "May 19",
       "sort_date": "20260519",
       "url": "https://earmilk.com/2026/05/19/ivelisse-del-carmen-turns-burnout-into-a-bold-pop-statement-on-before-im-done/",
@@ -1264,7 +1264,7 @@
     {
       "artist": "Alpine Universe",
       "song": "Tool",
-      "genre": "cinematic",
+      "genre": "",
       "date": "May 19",
       "sort_date": "20260519",
       "url": "https://earmilk.com/2026/05/19/alpine-universe-share-a-cinematic-journey-through-visceral-energy-on-new-video-tool/",
@@ -1272,7 +1272,7 @@
     },
     {
       "artist": "Triple Lutz",
-      "song": "Don\u2019t Wake Daddy",
+      "song": "Don’t Wake Daddy",
       "genre": "Indie",
       "date": "May 19",
       "sort_date": "20260519",
@@ -1300,7 +1300,7 @@
     {
       "artist": "Flyeski From The 106",
       "song": "LET IT RIDE",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/flyeski-from-the-106-turns-chaos-into-catharsis-on-explosive-new-single-let-it-ride/",
@@ -1309,14 +1309,14 @@
     {
       "artist": "Esma",
       "song": "blake",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/esma-turns-silence-into-atmosphere-on-haunting-new-release-blake/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/8f/09/aa/8f09aabb-ac8e-f974-28a3-3cc8308bfe41/886446994055.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Diphylleia Grayii defines a new era of lo-fi folk with",
+      "artist": "Diphylleia Grayii",
       "song": "Only Air",
       "genre": "Acoustic",
       "date": "May 18",
@@ -1325,7 +1325,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music/v4/28/1a/c5/281ac57a-f5f9-f516-014a-502cd9f1b31c/Cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Kickback\"",
+      "artist": "Kickback",
       "song": "Kickback",
       "genre": "Alt-Pop",
       "date": "May 18",
@@ -1334,9 +1334,9 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/85/64/7e/85647ef4-246d-d9a2-1015-ead23e409b26/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Adrielle Bow Belle's new relase, \"Icey Roads\"",
+      "artist": "Adrielle Bow Belle",
       "song": "Icey Roads",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/adrielle-bow-belles-new-relase-icey-roads-turns-quiet-reflection-into-powerful-storytelling/",
@@ -1345,7 +1345,7 @@
     {
       "artist": "Derin",
       "song": "Whitehill",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/derins-whitehill-turns-quiet-reflection-into-a-powerful-musical-experience/",
@@ -1354,14 +1354,14 @@
     {
       "artist": "DJ Saint M. Seagull",
       "song": "Peace Wanted Just To Be Free (DJ Saint M. Seagull Remix)",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/dj-saint-m-seagull-turns-a-historic-peace-anthem-into-a-statement-with-peace-wanted-just-to-be-free-dj-saint-m-seagull-remix/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c2/cb/0e/c2cb0ea4-9abc-0742-c468-264812711961/820200822673.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Broken Glass\" by French Dogs",
+      "artist": "Broken Glass\" by French Dogs",
       "song": "Broken Glass",
       "genre": "Alternative Rock",
       "date": "May 18",
@@ -1372,14 +1372,14 @@
     {
       "artist": "Leyla Romanova",
       "song": "Self-Control",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/leyla-romanova-finds-strength-in-stillness-on-self-control/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/66/59/5e/66595e7e-2582-1b9a-fb3a-3408ca800f25/cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Baby Girl (likes to lie)\"",
+      "artist": "Baby Girl (likes to lie)",
       "song": "Baby Girl (likes to lie)",
       "genre": "Alt-Pop",
       "date": "May 18",
@@ -1408,7 +1408,7 @@
     {
       "artist": "Captain Iron / Windrift Band",
       "song": "Woodlands Picnic",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 18",
       "sort_date": "20260518",
       "url": "https://earmilk.com/2026/05/18/captain-iron-windrift-band-turns-rainy-romance-into-pure-country-pop-gold-with-woodlands-picnic/",
@@ -1435,7 +1435,7 @@
     {
       "artist": "Kenton Hall & The Necessary Measures",
       "song": "The Sun Shone Down",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 15",
       "sort_date": "20260515",
       "url": "https://earmilk.com/2026/05/15/kenton-hall-the-necessary-measures-bring-grit-and-grandeur-together-on-the-sun-shone-down/",
@@ -1444,7 +1444,7 @@
     {
       "artist": "MARGUTERIE",
       "song": "Roman Empire",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 15",
       "sort_date": "20260515",
       "url": "https://earmilk.com/2026/05/15/marguterie-turns-obsession-into-art-on-the-haunting-new-single-roman-empire/",
@@ -1469,7 +1469,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/8f/cb/7d/8fcb7d45-fec5-75b6-d5ca-9f1f342d99a6/991043484127.png/400x400bb.jpg"
     },
     {
-      "artist": "UNTER STR\u00d8M",
+      "artist": "UNTER STRØM",
       "song": "Orynth",
       "genre": "Dance",
       "date": "May 15",
@@ -1489,7 +1489,7 @@
     {
       "artist": "Bobby Hagens",
       "song": "Check On Me",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 14",
       "sort_date": "20260514",
       "url": "https://earmilk.com/2026/05/14/bobby-hagens-turns-pain-into-purpose-on-the-emotionally-charged-check-on-me/",
@@ -1498,7 +1498,7 @@
     {
       "artist": "Strange Lot",
       "song": "Nobody Seems To Do The Math",
-      "genre": "Nobody Seems To Do The Math",
+      "genre": "",
       "date": "May 14",
       "sort_date": "20260514",
       "url": "https://earmilk.com/2026/05/14/strange-lot-unveil-textured-and-ethereal-single-nobody-seems-to-do-the-math/",
@@ -1552,7 +1552,7 @@
     {
       "artist": "ZOHARA",
       "song": "Freelance Song",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 13",
       "sort_date": "20260513",
       "url": "https://earmilk.com/2026/05/13/zohara-finds-freedom-and-joy-in-the-uplifting-new-anthem-freelance-song/",
@@ -1560,7 +1560,7 @@
     },
     {
       "artist": "Kraig Durco & Tavell JectX",
-      "song": "Be Somethin'",
+      "song": "Be Somethin",
       "genre": "Alternative Rock",
       "date": "May 13",
       "sort_date": "20260513",
@@ -1568,17 +1568,17 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a1/f5/68/a1f568a0-063e-55e5-31c0-539c61fd0f71/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"PATINA\" by Casper Sage",
+      "artist": "PATINA\" by Casper Sage",
       "song": "PATINA",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/patina-by-casper-sage-captures-the-beauty-of-emotional-aftermath-and-growing-pains-album/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e0/f0/68/e0f0680b-dc42-71d4-f1bd-746fe68120fa/093624821939.jpg/400x400bb.jpg"
     },
     {
-      "artist": "The new EP, \"Not Over,\"",
-      "song": "Not Over,",
+      "artist": "The new EP, \"Not Over,",
+      "song": "Not Over",
       "genre": "Alternative Rock",
       "date": "May 11",
       "sort_date": "20260511",
@@ -1586,18 +1586,9 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/65/73/19/65731972-d52a-0822-c544-16bdddf9d663/859715732528_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"This record is the most unfiltered & uninhibited we've ever been\": Good Kid",
-      "song": "This record is the most unfiltered and uninhibited we've ever been",
-      "genre": "Electronic",
-      "date": "May 11",
-      "sort_date": "20260511",
-      "url": "https://earmilk.com/2026/05/11/this-record-is-the-most-unfiltered-and-uninhibited-weve-ever-been-good-kid-share-the-tumultuous-process-of-putting-together-their-debut-album/",
-      "artwork": ""
-    },
-    {
       "artist": "Kataria",
-      "song": "I Earned It,",
-      "genre": "Feature",
+      "song": "I Earned It",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/kataria-makes-a-powerful-entrance-with-i-earned-it-a-debut-rooted-in-strength-and-self-discovery/",
@@ -1615,7 +1606,7 @@
     {
       "artist": "Norfolk artist Marv.P",
       "song": "Was It All Worth It (W.I.A.W.I)",
-      "genre": "Exclusive",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/norfolk-artist-marv-p-explores-sacrifice-growth-and-purpose-on-new-project-was-it-all-worth-it-w-i-a-w-i/",
@@ -1633,16 +1624,16 @@
     {
       "artist": "56ca$h",
       "song": "WORST ADULT EVER",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/56cah-captures-a-chaotic-anxiety-on-new-album-worst-adult-ever/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ca/ae/34/caae3487-056d-0268-7d03-c27fd147bc12/196874265543.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Saint Jude \u2670 Mark L",
+      "artist": "Saint Jude ♰ Mark L",
       "song": "Saints Without a Church",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/saint-jude-%e2%99%b0-mark-l-explore-faith-and-identity-on-saints-without-a-church-ep/",
@@ -1660,7 +1651,7 @@
     {
       "artist": "Substratos",
       "song": "Two Hearts, One Sound",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/substratos-blends-romance-and-orchestral-power-in-new-release-two-hearts-one-sound/",
@@ -1669,16 +1660,16 @@
     {
       "artist": "Youth Valley",
       "song": "Pills",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/youth-valley-craft-a-hypnotic-blend-of-shoegaze-and-post-punk-in-pills/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c5/d5/3c/c5d53c3a-3003-fcee-0f72-83f739ab6c54/820233043120.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"moscato\" by pastel..",
+      "artist": "moscato\" by pastel..",
       "song": "moscato",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 11",
       "sort_date": "20260511",
       "url": "https://earmilk.com/2026/05/11/moscato-by-pastel-turns-simple-moments-into-a-summer-ready-soundtrack/",
@@ -1694,7 +1685,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e0/1a/e5/e01ae557-41f1-4040-2b1f-0f7a80df1ed2/8089.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Heavy Set Woman",
+      "artist": "Heavy",
       "song": "Highway One",
       "genre": "Rock",
       "date": "May 10",
@@ -1705,7 +1696,7 @@
     {
       "artist": "Kevin Koplar",
       "song": "To a Better Dark",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 9",
       "sort_date": "20260509",
       "url": "https://earmilk.com/2026/05/09/kevin-koplar-steps-into-the-shadows-with-the-powerful-rock-release-to-a-better-dark/",
@@ -1714,7 +1705,7 @@
     {
       "artist": "Titouan L.C.S",
       "song": "YOUZOU",
-      "genre": "Uncategorized",
+      "genre": "",
       "date": "May 9",
       "sort_date": "20260509",
       "url": "https://earmilk.com/2026/05/09/titouan-l-c-s-shares-incredibly-groove-rich-irresistable-baile-funk-anthem-youzou/",
@@ -1749,7 +1740,7 @@
     },
     {
       "artist": "a place both wonderful & strange",
-      "song": "It\u2019s not that bad, muffin",
+      "song": "It’s not that bad, muffin",
       "genre": "Indie",
       "date": "May 9",
       "sort_date": "20260509",
@@ -1759,14 +1750,14 @@
     {
       "artist": "EARTH ANGEL",
       "song": "Easy To Miss",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 9",
       "sort_date": "20260509",
       "url": "https://earmilk.com/2026/05/09/earth-angel-turns-emotional-grit-into-indie-rock-gold-on-easy-to-miss/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/3d/a3/23/3da32385-848c-9f3e-1ba6-2d980d04d7af/824296181461_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Neurolapse refuses the formula with electrifying new EDM",
+      "artist": "Neurolapse",
       "song": "Drop Me",
       "genre": "Indie",
       "date": "May 9",
@@ -1804,7 +1795,7 @@
     {
       "artist": "Rai Renea",
       "song": "No Apology In My Throat",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/rai-renea-finds-strength-through-openness-on-no-apology-in-my-throat-album/",
@@ -1813,14 +1804,14 @@
     {
       "artist": "Billy Peake",
       "song": "Manic Waves",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/billy-peake-turns-isolation-and-outrage-into-a-brilliant-debut-album-manic-waves/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b4/5a/18/b45a1812-df2f-83e4-6619-ae07161169b2/859719650743_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Reverie\"",
+      "artist": "Reverie",
       "song": "Reverie",
       "genre": "Alternative",
       "date": "May 8",
@@ -1831,16 +1822,16 @@
     {
       "artist": "Waver",
       "song": "Space and Time",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/waver-finds-emotional-clarity-and-rock-memories-on-space-and-time-album/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/48/d5/58/48d55892-91eb-a757-0505-90498b7243d0/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Watermelon & Ginger\"",
+      "artist": "Watermelon & Ginger",
       "song": "Watermelon & Ginger",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/watermelon-ginger-finds-curly-mouth-turning-lifes-changes-into-art-album/",
@@ -1849,7 +1840,7 @@
     {
       "artist": "Miles Jeppson",
       "song": "GREEN",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/miles-jeppson-turns-memories-into-a-living-soundtrack-for-a-new-generation-with-green-album/",
@@ -1867,16 +1858,16 @@
     {
       "artist": "Mary Milton",
       "song": "On My Shoulder",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/mary-milton-blends-raw-emotions-and-healing-in-new-release-on-my-shoulder/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cc/4b/af/cc4baf7d-b562-efe2-9e24-36cd77933ae9/859730606071_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"Sky Fish Fly\"",
+      "artist": "Sky Fish Fly",
       "song": "Sky Fish Fly",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/sky-fish-fly-takes-kazaizen-into-a-psychedelic-future-of-experimental-pop-and-soul/",
@@ -1885,7 +1876,7 @@
     {
       "artist": "Pat Foster",
       "song": "Sunday School",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 8",
       "sort_date": "20260508",
       "url": "https://earmilk.com/2026/05/08/pat-foster-turns-childhood-reflection-into-gold-anthem-with-sunday-school/",
@@ -1903,7 +1894,7 @@
     {
       "artist": "UKofA",
       "song": "TIME WILL TAKE THIS ALL AWAY FROM US",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 7",
       "sort_date": "20260507",
       "url": "https://earmilk.com/2026/05/07/ukofa-explores-time-memory-and-modern-chaos-on-new-album-time-will-take-this-all-away-from-us/",
@@ -1912,7 +1903,7 @@
     {
       "artist": "Fally Ipupa",
       "song": "XX",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 7",
       "sort_date": "20260507",
       "url": "https://earmilk.com/2026/05/07/fally-ipupa-blend-emotion-rhythm-and-global-star-power-in-xx-album/",
@@ -1939,7 +1930,7 @@
     {
       "artist": "Sean Dampte",
       "song": "Awoodah: Sounds of Kalakuta",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 7",
       "sort_date": "20260507",
       "url": "https://earmilk.com/2026/05/07/sean-dampte-channels-growth-freedom-and-energy-on-awoodah-sounds-of-kalakuta-album/",
@@ -2018,7 +2009,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/a3/0d/2fa30df6-5f57-05ff-5fc5-2eec62dbef5e/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\"L.L.L. (ATH Remix)\" by m0n0 jay",
+      "artist": "L.L.L. (ATH Remix)\" by m0n0 jay",
       "song": "L.L.L. (ATH Remix)",
       "genre": "Electronic",
       "date": "May 6",
@@ -2047,7 +2038,7 @@
     {
       "artist": "ANIE DELGADO",
       "song": "WITHOUT YOU",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 6",
       "sort_date": "20260506",
       "url": "https://earmilk.com/2026/05/06/anie-delgado-turns-pain-into-power-on-without-you/",
@@ -2063,9 +2054,9 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9a/50/90/9a509027-501f-968e-2c0e-ac8d7b5a1aa6/820200328335.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Tie Bond translates big city energy into a mesmerizing new",
+      "artist": "Tie Bond",
       "song": "LA Nights",
-      "genre": "Feature",
+      "genre": "",
       "date": "May 6",
       "sort_date": "20260506",
       "url": "https://earmilk.com/2026/05/06/tie-bond-translates-big-city-energy-into-a-mesmerizing-new-release-la-nights/",
@@ -2083,7 +2074,7 @@
     {
       "artist": "Me The Machine",
       "song": "The Flesh Of The Innocent",
-      "genre": "Album Reviews",
+      "genre": "",
       "date": "May 6",
       "sort_date": "20260506",
       "url": "https://earmilk.com/2026/05/06/me-the-machine-explores-emotional-isolation-in-the-flesh-of-the-innocent-album/",
@@ -2100,7 +2091,7 @@
     },
     {
       "artist": "<3peace.",
-      "song": "WHEN YOU KNOW.,",
+      "song": "WHEN YOU KNOW",
       "genre": "Pop",
       "date": "May 6",
       "sort_date": "20260506",
@@ -2108,7 +2099,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/7a/5e/bc/7a5ebcfe-c874-b9be-a151-e479f03f55c5/824296431009_cover.jpg/400x400bb.jpg"
     },
     {
-      "artist": "\u00c5sa Orbison",
+      "artist": "Åsa Orbison",
       "song": "Lullaby of Birdland",
       "genre": "Jazz",
       "date": "May 6",
@@ -2478,7 +2469,7 @@
     },
     {
       "artist": "Reza Safinia",
-      "song": "Watching From...",
+      "song": "Watching From",
       "genre": "Electronic",
       "date": "Apr 28",
       "sort_date": "20260428",
@@ -2577,8 +2568,8 @@
     },
     {
       "artist": "Sabina Chantouria",
-      "song": "Can\u2019t Let You Go",
-      "genre": "Feature",
+      "song": "Can’t Let You Go",
+      "genre": "",
       "date": "Apr 27",
       "sort_date": "20260427",
       "url": "https://earmilk.com/2026/04/27/sabina-chantouria-delivers-cinematic-emotion-in-new-video-cant-let-you-go-music-video/",
@@ -2587,7 +2578,7 @@
     {
       "artist": "Darkswoon",
       "song": "Antivenom",
-      "genre": "Feature",
+      "genre": "",
       "date": "Apr 27",
       "sort_date": "20260427",
       "url": "https://earmilk.com/2026/04/27/darkswoon-shares-emotional-depth-and-sonic-power-on-antivenom/",
@@ -2605,14 +2596,14 @@
     {
       "artist": "Apstara",
       "song": "One Minute Mantras I: Awakening",
-      "genre": "Feature",
+      "genre": "",
       "date": "Apr 27",
       "sort_date": "20260427",
       "url": "https://earmilk.com/2026/04/27/apstara-drops-mindful-listening-with-one-minute-mantras-i-awakening-album/",
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/85/8e/6b/858e6b7f-8d5b-75f9-881a-f5f7857b764c/artwork.jpg/400x400bb.jpg"
     },
     {
-      "artist": "Maya J\u2019an",
+      "artist": "Maya J’an",
       "song": "new june",
       "genre": "Alt-Pop",
       "date": "Apr 27",
@@ -2630,7 +2621,7 @@
       "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/48/7d/f3/487df336-df5c-5652-97d0-d180a81c5e10/885012032559.png/400x400bb.jpg"
     },
     {
-      "artist": "D\u2019ANDR\u00c9",
+      "artist": "D’ANDRÉ",
       "song": "Ghini",
       "genre": "Pop",
       "date": "Apr 27",
@@ -2640,8 +2631,8 @@
     },
     {
       "artist": "FMG Copa$tetic Baby",
-      "song": "Comfort Turned Complicated (I\u2019m Passing Over)",
-      "genre": "Comfort Turned Complicated (I\u2019m Passing Over)",
+      "song": "Comfort Turned Complicated (I’m Passing Over)",
+      "genre": "",
       "date": "Apr 27",
       "sort_date": "20260427",
       "url": "https://earmilk.com/2026/04/27/fmg-copatetic-baby-captures-loyalty-love-and-everything-in-between-on-comfort-turned-complicated-im-passing-over/",
@@ -2676,7 +2667,7 @@
     },
     {
       "artist": "Michael Gilas",
-      "song": "You Don\u2019t Get To Say Goodbye",
+      "song": "You Don’t Get To Say Goodbye",
       "genre": "Indie",
       "date": "Apr 24",
       "sort_date": "20260424",
