@@ -253,6 +253,14 @@ def clean_artist(artist, song=''):
     m = re.match(r'^(.+?)\s+(?:' + VERBS + r')\b', a, re.IGNORECASE)
     if m:
         a = m.group(1).strip()
+    # A quoted song leaked in: '"Song" by Artist' -> keep what follows "by"
+    if re.search(r'[\u201c\u201d"]', a) and re.search(r'\bby\b', a, re.IGNORECASE):
+        mb = re.search(r'\bby\s+(.+)$', a, re.IGNORECASE)
+        if mb:
+            a = mb.group(1).strip()
+    # 'With "Song," Artist ...' -> keep what follows the comma
+    elif a.lower().startswith('with ') and ',' in a:
+        a = a.split(',')[-1].strip()
     # Still sentence-like? Salvage the leading capitalized name run instead.
     if len(a.split()) > 6:
         salvaged = _leading_name(a)
@@ -260,7 +268,7 @@ def clean_artist(artist, song=''):
             a = salvaged
     a = re.sub(r'[\u2019\']s?\s*$', '', a).strip()
     a = re.sub(r'[,;:]+$', '', a).strip()
-    a = a.strip('\u201c\u201d"\'')
+    a = a.strip('\u201c\u201d"\'').strip()
     if len(a.split()) > 6:
         return ''
     # A lone function word means we captured a sentence start, not a name
