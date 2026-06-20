@@ -362,6 +362,8 @@ def flag_suspicious(artist, song, genre):
         reasons.append('artist is unusually long')
     if (song or '').strip().endswith((',', ';', ':')):
         reasons.append('song ends in stray punctuation')
+    if a.strip() and a.strip().lower() == (song or '').strip().lower():
+        reasons.append('artist equals song')
     if genre and genre.lower() in (a.lower(), (song or '').lower()):
         reasons.append('genre echoes artist/song')
     return '; '.join(reasons)
@@ -396,6 +398,11 @@ def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, dat
     # Earmilk had no real genre tag -> fall back to iTunes' genre
     if not genre and itunes_genre:
         genre = clean_genre(itunes_genre, artist, song)
+    # Final safety net: a card whose artist still equals its song is a misparse
+    # we couldn't repair. Skip it rather than publish "X by X".
+    if artist.strip().lower() == song.strip().lower():
+        print('  SKIPPED (artist equals song): ' + url)
+        return False
     song_key = artist.lower() + '|' + song.lower()
     if song_key in song_to_post:
         print('  DUPLICATE SKIPPED: ' + artist + ' - ' + song)
