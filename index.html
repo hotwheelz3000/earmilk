@@ -93,7 +93,11 @@
   a.btn:hover { background: var(--accent-soft); }
   .status { font-size: 14px; color: var(--text-faint); padding: 3rem 0; text-align: center; }
   .error { color: var(--error); }
-  @media (max-width: 520px) { .date, .pill { display: none; } .card { padding: 10px 12px; } .artwork, .artwork-placeholder { width: 40px; height: 40px; } }
+  @media (max-width: 520px) {
+    .card { padding: 10px 12px; flex-wrap: wrap; row-gap: 6px; }
+    .artwork, .artwork-placeholder { width: 40px; height: 40px; }
+    .meta { order: 1; flex-basis: 100%; justify-content: flex-start; padding-left: 76px; }
+  }
 </style>
 </head>
 <body>
@@ -198,8 +202,8 @@ function filter() {
       <div class="meta">
         <span class="date">${esc(p.date || "")}</span>
         ${p.genre ? `<span class="pill ${gc(p.genre)}">${esc(p.genre)}</span>` : ""}
-        <a class="btn" href="${esc(spotifySearch(p.artist, p.song))}" target="_blank" rel="noopener">${playIcon} Play</a>
       </div>
+      <a class="btn" href="${esc(spotifySearch(p.artist, p.song))}" target="_blank" rel="noopener">${playIcon} Play</a>
     </div>`;
   }).join("");
 }
