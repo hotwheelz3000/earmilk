@@ -1,6 +1,60 @@
 {
-  "updated": "Jun 23, 2026 06:52 AM PT",
+  "updated": "Jun 23, 2026 08:02 AM PT",
   "posts": [
+    {
+      "artist": "Yasmina Cherelle",
+      "song": "Liberate Me",
+      "genre": "Electro Pop",
+      "date": "Jun 23",
+      "sort_date": "20260623",
+      "url": "https://earmilk.com/2026/06/23/yasmina-cherelle-finds-freedom-on-uplifting-new-single-liberate-me/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/84/db/1a/84db1a6d-4739-bbea-5ab7-e167d2e607f8/artwork.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Noah Levine",
+      "song": "Leaver",
+      "genre": "Indie",
+      "date": "Jun 23",
+      "sort_date": "20260623",
+      "url": "https://earmilk.com/2026/06/23/noah-levine-explores-growth-memory-and-new-beginnings-on-his-reflective-album-leaver/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a8/3f/3d/a83f3d0c-ae56-29cd-9bce-f987894b36d4/820233291361.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "OKay The Duo",
+      "song": "SUPER VILLAIN",
+      "genre": "Hip-Hop",
+      "date": "Jun 23",
+      "sort_date": "20260623",
+      "url": "https://earmilk.com/2026/06/23/okay-the-duo-shares-raw-power-and-unapologetic-identity-on-super-villain/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/81/2c/4a/812c4a81-d5ce-b96e-acfd-8a339ca672df/438391.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Karen Salicath Jamali",
+      "song": "Only In Love We Are",
+      "genre": "Folk",
+      "date": "Jun 23",
+      "sort_date": "20260623",
+      "url": "https://earmilk.com/2026/06/23/karen-salicath-jamali-finds-new-expression-through-the-heartfelt-folk-single-only-in-love-we-are/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/ac/16/19/ac161995-113e-adbb-e5ff-e7408bb997e3/199316625080_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "PIVOTS",
+      "song": "Fake News",
+      "genre": "Electronic",
+      "date": "Jun 23",
+      "sort_date": "20260623",
+      "url": "https://earmilk.com/2026/06/23/pivots-deliver-a-bold-electronic-statement-with-their-latest-release-fake-news/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2b/2b/17/2b2b171a-25bd-e7ef-a5f8-bc92d22b94dd/Cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Ruby & Sasha",
+      "song": "Outdoor Shower",
+      "genre": "Indie",
+      "date": "Jun 23",
+      "sort_date": "20260623",
+      "url": "https://earmilk.com/2026/06/23/ruby-sasha-turn-early-adulthood-reflections-into-art-on-outdoor-shower/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/5a/ae/51/5aae513f-456c-26b3-a13d-d0b21b8854ce/5063992904003_cover.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Un:said",
       "song": "Isn't Over Yet",
