@@ -1,6 +1,51 @@
 {
-  "updated": "Jul 10, 2026 03:17 AM PT",
+  "updated": "Jul 10, 2026 06:06 AM PT",
   "posts": [
+    {
+      "artist": "The Fiends",
+      "song": "Sonder",
+      "genre": "Pop",
+      "date": "Jul 10",
+      "sort_date": "20260710",
+      "url": "https://earmilk.com/2026/07/10/the-fiends-explore-the-hidden-stories-around-us-with-sonder/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f8/d4/b5/f8d4b59c-ac64-3c06-7ec1-ec55fa553dca/5063961681553_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Linus Alberg",
+      "song": "Tides",
+      "genre": "Alt-Pop",
+      "date": "Jul 10",
+      "sort_date": "20260710",
+      "url": "https://earmilk.com/2026/07/10/tides-finds-the-bergamot-exploring-heartbreak-hope-and-the-fragile-beauty-of-being-remembered/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/81/e1/b6/81e1b6b3-b390-b56c-2a07-a2a6b657f392/3663729268709_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Dina Dove",
+      "song": "Cotard\u2019s Delusion",
+      "genre": "Indie",
+      "date": "Jul 10",
+      "sort_date": "20260710",
+      "url": "https://earmilk.com/2026/07/10/dina-dove-turns-emotional-chaos-into-dancefloor-energy-with-new-disco-grunge-anthem-cotards-delusion/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/59/95/65/5995650d-2f47-2cd9-2962-c915d6282d8b/artwork.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Kae Sera",
+      "song": "THE MOON [ SOMMERNACHT REMIX ]",
+      "genre": "Electro",
+      "date": "Jul 10",
+      "sort_date": "20260710",
+      "url": "https://earmilk.com/2026/07/10/kae-sera-returns-with-a-refreshed-vision-of-her-most-streamed-original-track-the-moon-sommernacht-remix-premiere/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/6b/78/c8/6b78c8e7-7ffa-e608-4090-c4c834787380/859741428464_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Pastor Charles A.R.",
+      "song": "Depend On You",
+      "genre": "Hip-Hop",
+      "date": "Jul 10",
+      "sort_date": "20260710",
+      "url": "https://earmilk.com/2026/07/10/pastor-charles-a-r-delivers-a-powerful-anthem-of-faith-with-depend-on-you-featuring-joshua-penn-ron-smith/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/b7/39/a7/b739a7aa-b03b-d62d-2e95-e8fdf018e15e/601570437038_cover.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Golden Cats",
       "song": "black cat/golden retriever",
