@@ -1,6 +1,24 @@
 {
-  "updated": "Jul 14, 2026 02:50 AM PT",
+  "updated": "Jul 14, 2026 04:20 AM PT",
   "posts": [
+    {
+      "artist": "Brian Elodi",
+      "song": "After Only",
+      "genre": "Acoustic",
+      "date": "Jul 14",
+      "sort_date": "20260714",
+      "url": "https://earmilk.com/2026/07/14/brian-elodi-captures-memory-mistakes-and-meaning-in-emotional-debut-album-after-only/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/c9/86/76/c9867647-fbc5-f48a-3cbc-2389ea95ac48/859725960058_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Sam Gelston",
+      "song": "See Through Now",
+      "genre": "Alternative",
+      "date": "Jul 14",
+      "sort_date": "20260714",
+      "url": "https://earmilk.com/2026/07/14/with-see-through-now-sam-gelston-finds-beauty-in-imperfection-absurdity-and-the-chaos-of-being-human-album/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/70/7e/2d/707e2d33-e94a-5171-48af-70492ecbc532/823000455768.png/400x400bb.jpg"
+    },
     {
       "artist": "Andy Koh",
       "song": "Everything",
