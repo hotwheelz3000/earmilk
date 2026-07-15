@@ -1,6 +1,15 @@
 {
-  "updated": "Jul 15, 2026 06:19 AM PT",
+  "updated": "Jul 15, 2026 08:20 AM PT",
   "posts": [
+    {
+      "artist": "Josh Hoffman",
+      "song": "39 Steps",
+      "genre": "Folk",
+      "date": "Jul 15",
+      "sort_date": "20260715",
+      "url": "https://earmilk.com/2026/07/15/josh-hoffman-gives-melancholy-an-equilibrium-on-39-steps/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f7/2b/f1/f72bf1d3-e8d0-e40f-9fcc-20a35458734d/824296809303_cover.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Brian Elodi",
       "song": "After Only",
