@@ -1,6 +1,24 @@
 {
-  "updated": "Jul 16, 2026 11:00 AM PT",
+  "updated": "Jul 16, 2026 12:18 PM PT",
   "posts": [
+    {
+      "artist": "Nippa",
+      "song": "Homegrown",
+      "genre": "Indie",
+      "date": "Jul 16",
+      "sort_date": "20260716",
+      "url": "https://earmilk.com/2026/07/16/nippa-shares-the-love-to-his-hometown-with-homegrown-featuring-blxst-video/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4a/0e/82/4a0e823a-9a83-0814-209f-913565c9cdc3/628678763876_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Eric Hirshberg",
+      "song": "What\u2019s Not Wrong",
+      "genre": "Pop",
+      "date": "Jul 16",
+      "sort_date": "20260716",
+      "url": "https://earmilk.com/2026/07/16/eric-hirshberg-shares-uplifting-message-on-gratitude-with-whats-not-wrong/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9c/65/6b/9c656bed-61e5-8a88-1121-1aae3e04c285/824296937259_cover.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Josh Hoffman",
       "song": "39 Steps",
