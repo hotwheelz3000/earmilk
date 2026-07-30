@@ -1,6 +1,51 @@
 {
-  "updated": "Jul 30, 2026 08:05 AM PT",
+  "updated": "Jul 30, 2026 10:18 AM PT",
   "posts": [
+    {
+      "artist": "Aidan Leclaire",
+      "song": "Diving",
+      "genre": "Alternative Rock",
+      "date": "Jul 30",
+      "sort_date": "20260730",
+      "url": "https://earmilk.com/2026/07/30/aidan-leclaire-explores-inner-worlds-and-emotional-depth-on-new-album-diving/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/f4/64/33/f46433c9-43fa-ff28-276c-9c578ace7cbb/885000043314.png/400x400bb.jpg"
+    },
+    {
+      "artist": "\u30c8\u30e2(CV:\u6d45\u6cbc\u664b\u592a\u90ce)&\u30cb\u30fc\u30ca(CV:KENN)",
+      "song": "Cycle",
+      "genre": "Alt-Pop",
+      "date": "Jul 30",
+      "sort_date": "20260730",
+      "url": "https://earmilk.com/2026/07/30/cycle-blends-memories-groove-and-hope-into-paul-frazer-clarkes-finest-statement/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music123/v4/50/c8/cd/50c8cd7e-7e72-bf1a-c251-25c4243767aa/QWCE_00731.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "DA-MOVEMENT",
+      "song": "24's",
+      "genre": "Hip-Hop",
+      "date": "Jul 30",
+      "sort_date": "20260730",
+      "url": "https://earmilk.com/2026/07/30/da-movement-revives-the-impossible-with-24s-a-historic-track-that-honors-legacy-through-hip-hop/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c1/24/16/c12416e0-3dd5-9528-7d46-cf75baca43fd/681585501627.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "D.O.S.E sound",
+      "song": "Fine",
+      "genre": "Alt-Pop",
+      "date": "Jul 30",
+      "sort_date": "20260730",
+      "url": "https://earmilk.com/2026/07/30/d-o-s-e-sound-explores-layers-of-meaning-and-melody-with-new-single-fine/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/37/d1/1a37d1b1-8508-54f2-f541-bf4e437dda76/19UMGIM05028.rgb.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Reality Distortion unites voices and",
+      "song": "Renaissance",
+      "genre": "Acoustic",
+      "date": "Jul 30",
+      "sort_date": "20260730",
+      "url": "https://earmilk.com/2026/07/30/reality-distortion-unites-voices-and-shares-global-hope-through-renaissance/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/b4/18/8f/b4188f47-69f4-8f43-b92c-b2e6f1cbdc04/794043212215.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Secret Bad Boy",
       "song": "In the Fullness of Time (You Become All the People You Revile)",
