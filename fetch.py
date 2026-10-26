@@ -5,6 +5,7 @@ import json
 import re
 import time
 import html
+import sys
 from datetime import datetime, timezone, timedelta
 
 FEED_PAGES = [
@@ -106,25 +107,34 @@ VERBS = (
 )
 
 def parse_headline(headline):
-    # Pattern 1: "Song" is ... Artist
+    # Pattern 0: With "Song," Artist VERB ...
+    with_song = re.match(r'^with\s+[\u201c"](.+?)[,]?[\u201d"],?\s+([^\u201c"]+?)\s+(?:' + VERBS + r')\b',
+                         headline, re.IGNORECASE)
+    if with_song:
+        return with_song.group(2).strip(), with_song.group(1).strip()
+
+    # Pattern 1: "Song" is ... by/from Artist. Without "by"/"from" the headline
+    # usually doesn't name the artist ('"X" is a dreamy debut single'), so fall
+    # through to the article body instead of guessing a capitalized word.
     song_first = re.match(r'^\u201c(.+?)\u201d\s+is\s+', headline, re.IGNORECASE)
     if song_first:
         song = song_first.group(1).strip()
-        rest = re.sub(r'\bat\s+(her|his|its)\s+\w+\s*$', '', headline, flags=re.IGNORECASE)
-        names = re.findall(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b', rest)
-        skip = {'Wash', 'Rock', 'Riser', 'The', 'At', 'Her', 'His'}
-        names = [n for n in names if n not in skip]
-        artist = names[-1] if names else ''
+        rest = headline[song_first.end():]
+        rest = re.sub(r'\bat\s+(her|his|its)\s+\w+\s*$', '', rest, flags=re.IGNORECASE)
+        by = re.search(r'\b(?:by|from)\s+([A-Z][\w$.\-]*(?:\s+(?:&|and|x|[A-Z][\w$.\-]*))*)', rest)
+        artist = by.group(1).strip() if by else ''
         if artist and song:
             return artist, song
+        return '', song
 
     # Pattern 2: Artist's "Song"
     possessive = re.match(r'^(.+?)[\u2019\']s\s+[\u201c"](.+?)[\u201d"]', headline)
     if possessive:
         return possessive.group(1).strip(), possessive.group(2).strip()
 
-    # Pattern 3: Artist VERB ... "Song"
-    artist_match = re.match(r'^(.+?)\s+(?:' + VERBS + r')\b', headline, re.IGNORECASE)
+    # Pattern 3: Artist VERB ... "Song" (the artist can't run into a quoted
+    # title, or a word like "Soar" inside the song would be read as the verb)
+    artist_match = re.match(r'^([^“"]+?)\s+(?:' + VERBS + r')\b', headline, re.IGNORECASE)
     artist = ''
     if artist_match:
         artist = re.sub(r'[\u2019\']s?\s*$', '', artist_match.group(1)).strip()
@@ -239,6 +249,16 @@ def clean_song(song):
     s = s.strip()
     return s
 
+ROLES = (
+    r'act|group|duo|trio|artist|singer|songwriter|rapper|producer|collective|'
+    r'outfit|musician|composer|vocalist|multi-instrumentalist'
+)
+
+GENERIC_WORDS = {
+    'single', 'album', 'ep', 'lp', 'debut', 'new', 'track', 'song', 'video',
+    'tv', 'film', 'music', 'mixtape', 'remix', 'visualizer', 'and', 'x', '+',
+}
+
 def _leading_name(text):
     # Pull the leading run of Capitalized / ALL-CAPS words (an artist name)
     # up to the first lowercase word (usually the verb).
@@ -276,9 +296,7 @@ def clean_artist(artist, song=''):
     # Leaked descriptor: '<desc> group/duo/artist/act <Name>' -> keep the Name.
     # Requires text before the role word and a short name after it, so real
     # names ending in Band/Project (e.g. 'Windrift Band') are untouched.
-    desc = re.match(
-        r'^.+?\s+(?:act|group|duo|trio|artist|singer|songwriter|rapper|'
-        r'producer|collective|outfit|musician)\s+(.+)$', a, re.IGNORECASE)
+    desc = re.match(r'^.+?\s+(?:' + ROLES + r')\s+(.+)$', a, re.IGNORECASE)
     if desc:
         rest = desc.group(1).strip()
         if 1 <= len(rest.split()) <= 4:
@@ -296,6 +314,9 @@ def clean_artist(artist, song=''):
     # A lone function word means we captured a sentence start, not a name
     if a.lower() in {'this', 'that', 'the', 'a', 'an', 'i', 'we', 'he', 'she',
                      'they', 'it', 'my', 'our', 'his', 'her', 'their', 'on'}:
+        return ''
+    # Only generic words ("Single", "Tv", "Debut Album") is a fragment, not a name
+    if a and all(w.lower().strip('.,') in GENERIC_WORDS for w in a.replace('&', ' ').split()):
         return ''
     return a
 
@@ -355,8 +376,7 @@ def flag_suspicious(artist, song, genre):
         reasons.append('artist has a quote')
     if re.search(r'\bby\b', a, re.IGNORECASE):
         reasons.append('artist contains "by"')
-    if re.match(r'^.+?\s+(?:act|group|duo|trio|artist|singer|songwriter|rapper|'
-                r'producer|collective|outfit|musician)\s+\S', a, re.IGNORECASE):
+    if re.match(r'^.+?\s+(?:' + ROLES + r')\s+\S', a, re.IGNORECASE):
         reasons.append('artist looks like a descriptor phrase')
     if len(a.split()) > 5:
         reasons.append('artist is unusually long')
@@ -377,7 +397,7 @@ def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, dat
     genre = clean_genre(genre, artist, song)
     # Auto-repair: if the artist still looks mis-parsed, recover it from the URL.
     if flag_suspicious(artist, song, genre):
-        slug_artist = artist_from_slug(url, song)
+        slug_artist = clean_artist(artist_from_slug(url, song), song)
         if slug_artist and not flag_suspicious(slug_artist, song, genre):
             print('  AUTO-FIXED artist: ' + repr(artist) + ' -> ' + repr(slug_artist) +
                   ' (from URL)')
@@ -459,7 +479,7 @@ def scrape_archive_page(url, url_to_post, song_to_post, existing_posts):
         return added
     except Exception as e:
         print('Archive error: ' + str(e))
-        return 0
+        return None
 
 def parse_feed(xml, url_to_post, song_to_post, existing_posts):
     root = ET.fromstring(xml)
@@ -519,11 +539,13 @@ def main():
             p['sort_date'] = display_to_sort(p.get('date', 'Jan 1'))
 
     total_added = 0
+    sources_ok = 0
 
     print('Fetching RSS feeds...')
     for feed_url in FEED_PAGES:
         try:
             xml = fetch_url(feed_url, timeout=15)
+            sources_ok += 1
             added = parse_feed(xml, url_to_post, song_to_post, existing_posts)
             total_added += added
             print('RSS page added ' + str(added) + ' posts')
@@ -536,8 +558,16 @@ def main():
         archive_url = 'https://earmilk.com/' + date_path + '/'
         print('Checking: ' + archive_url)
         added = scrape_archive_page(archive_url, url_to_post, song_to_post, existing_posts)
-        total_added += added
+        if added is not None:
+            sources_ok += 1
+            total_added += added
         time.sleep(1)
+
+    # Every Earmilk request failed (e.g. the site is returning 403): leave
+    # posts.json alone so "updated" doesn't claim a refresh, and fail the run.
+    if sources_ok == 0:
+        print('FATAL: could not fetch any Earmilk feed or archive page; posts.json not written')
+        sys.exit(1)
 
     existing_posts.sort(key=lambda p: p.get('sort_date') or '00000000', reverse=True)
     out = {
@@ -553,5 +583,4 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         print('Fatal error: ' + str(e))
-        import sys
-        sys.exit(0)
+        sys.exit(1)
