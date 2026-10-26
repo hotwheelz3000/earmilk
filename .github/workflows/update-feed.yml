@@ -24,7 +24,6 @@ jobs:
           python-version: "3.12"
 
       - name: Fetch Earmilk RSS
-        continue-on-error: true
         run: python fetch.py
 
       - name: Commit updated posts.json
