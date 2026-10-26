@@ -1,0 +1,68 @@
+name: Update Feed From Shortcut
+
+# Earmilk blocks GitHub's servers, so an iPhone Shortcut downloads
+# https://earmilk.com/feed/ and uploads it to feeds/page1.xml with the GitHub
+# API. That push runs this workflow, which parses the uploaded copy (no
+# requests to earmilk.com) and commits posts.json only if it gained posts.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "feeds/*.xml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Back-to-back uploads run one at a time instead of racing each other.
+concurrency:
+  group: feed-from-shortcut
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Los_Angeles
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      # The Mac launchd job (scripts/update_feed.sh) also pushes posts.json.
+      # This merges posts.json post-by-post on rebase; see .gitattributes.
+      MERGE_DRIVER: "merge.posts-union.driver=python3 scripts/merge_posts.py %O %A %B"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Parse uploaded feed
+        run: python fetch.py --local
+
+      - name: Commit and push posts.json
+        run: |
+          if git diff --quiet -- posts.json; then
+            echo "No new posts; nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json
+          git commit -q -m "chore: update feed from Shortcut $(date +'%Y-%m-%d %H:%M %Z')"
+          # Rebase onto whatever the Mac job pushed meanwhile, then push; if
+          # it pushes again in between, the push is rejected and we retry.
+          for attempt in 1 2 3 4 5; do
+            if git -c "$MERGE_DRIVER" pull -q --rebase origin main && git push -q origin HEAD:main; then
+              echo "Pushed posts.json"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::push attempt $attempt failed; retrying"
+            sleep $((attempt * 10))
+          done
+          echo "::error::could not push posts.json after 5 attempts"
+          exit 1

@@ -1,0 +1,3 @@
+# posts.json is rewritten by both the Mac launchd job and the Shortcut workflow.
+# Merge it post-by-post instead of line-by-line; see scripts/merge_posts.py.
+posts.json merge=posts-union

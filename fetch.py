@@ -6,6 +6,7 @@ import re
 import time
 import html
 import sys
+import glob
 from datetime import datetime, timezone, timedelta
 
 FEED_PAGES = [
@@ -481,7 +482,9 @@ def scrape_archive_page(url, url_to_post, song_to_post, existing_posts):
         print('Archive error: ' + str(e))
         return None
 
-def parse_feed(xml, url_to_post, song_to_post, existing_posts):
+CONTENT_ENCODED = '{http://purl.org/rss/1.0/modules/content/}encoded'
+
+def parse_feed(xml, url_to_post, song_to_post, existing_posts, fetch_articles=True):
     root = ET.fromstring(xml)
     added = 0
     for item in root.findall('.//item'):
@@ -498,13 +501,23 @@ def parse_feed(xml, url_to_post, song_to_post, existing_posts):
 
         artist, song = parse_headline(headline)
         # If headline parse fails, fetch the article body
-        if not artist or not song:
+        if (not artist or not song) and fetch_articles:
             try:
                 art_html = fetch_url(link, timeout=10)
                 artist, song = extract_artist_song(headline, art_html)
                 time.sleep(0.5)
             except Exception:
                 pass
+        # Local mode can't reach earmilk.com; the feed item carries the article
+        # HTML in <content:encoded> (or a summary in <description>), so use that.
+        # WordPress writes its curly quotes there as entities (&#8220;), which
+        # the quote matching in extract_from_body needs as characters.
+        elif not artist or not song:
+            body_el = item.find(CONTENT_ENCODED)
+            if body_el is None or not body_el.text:
+                body_el = item.find('description')
+            if body_el is not None and body_el.text:
+                artist, song = extract_artist_song(headline, html.unescape(body_el.text))
 
         print('RSS: ' + repr(headline[:60]) + ' -> ' + repr(artist) + ' / ' + repr(song[:40]))
         if add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, date, sort_date, link):
@@ -519,7 +532,7 @@ def get_recent_archive_dates():
         dates.append(d.strftime('%Y/%m/%d'))
     return dates
 
-def main():
+def load_posts():
     try:
         with open('posts.json') as f:
             existing = json.load(f)
@@ -537,6 +550,19 @@ def main():
             p['artwork'] = fetch_artwork(p['artist'], p['song'])
         if not p.get('sort_date'):
             p['sort_date'] = display_to_sort(p.get('date', 'Jan 1'))
+    return existing_posts, url_to_post, song_to_post
+
+def write_posts(existing_posts):
+    existing_posts.sort(key=lambda p: p.get('sort_date') or '00000000', reverse=True)
+    out = {
+        'updated': datetime.now(timezone(timedelta(hours=-7))).strftime('%b %-d, %Y %I:%M %p PT'),
+        'posts': existing_posts
+    }
+    with open('posts.json', 'w') as f:
+        json.dump(out, f, indent=2)
+
+def main():
+    existing_posts, url_to_post, song_to_post = load_posts()
 
     total_added = 0
     sources_ok = 0
@@ -569,18 +595,50 @@ def main():
         print('FATAL: could not fetch any Earmilk feed or archive page; posts.json not written')
         sys.exit(1)
 
-    existing_posts.sort(key=lambda p: p.get('sort_date') or '00000000', reverse=True)
-    out = {
-        'updated': datetime.now(timezone(timedelta(hours=-7))).strftime('%b %-d, %Y %I:%M %p PT'),
-        'posts': existing_posts
-    }
-    with open('posts.json', 'w') as f:
-        json.dump(out, f, indent=2)
+    write_posts(existing_posts)
+    print('Done. Total added: ' + str(total_added) + '. Total posts: ' + str(len(existing_posts)))
+
+def main_local(paths):
+    # Backup path for when Earmilk blocks GitHub's servers: an iPhone Shortcut
+    # uploads https://earmilk.com/feed/ to feeds/*.xml and we parse that copy.
+    # Nothing here requests earmilk.com.
+    if not paths:
+        paths = sorted(glob.glob('feeds/*.xml'))
+    existing_posts, url_to_post, song_to_post = load_posts()
+
+    total_added = 0
+    files_ok = 0
+    for path in paths:
+        print('Parsing local feed ' + path + '...')
+        try:
+            with open(path, 'rb') as f:
+                xml = f.read()
+            if ET.fromstring(xml).find('channel') is None:
+                raise ValueError('not an RSS feed (no <channel>)')
+            files_ok += 1
+            added = parse_feed(xml, url_to_post, song_to_post, existing_posts, fetch_articles=False)
+            total_added += added
+            print(path + ' added ' + str(added) + ' posts')
+        except Exception as e:
+            print('Local feed error in ' + path + ': ' + str(e))
+
+    if files_ok == 0:
+        print('FATAL: no readable RSS in ' + (', '.join(paths) or 'feeds/*.xml') + '; posts.json not written')
+        sys.exit(1)
+    # Only touch posts.json when there's something new, so the workflow only
+    # commits real additions (not just a fresh "updated" time).
+    if total_added == 0:
+        print('No new posts; posts.json left unchanged')
+        return
+    write_posts(existing_posts)
     print('Done. Total added: ' + str(total_added) + '. Total posts: ' + str(len(existing_posts)))
 
 if __name__ == '__main__':
     try:
-        main()
+        if len(sys.argv) > 1 and sys.argv[1] == '--local':
+            main_local(sys.argv[2:])
+        else:
+            main()
     except Exception as e:
         print('Fatal error: ' + str(e))
         sys.exit(1)

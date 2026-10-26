@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Placeholder. An iPhone Shortcut replaces this file with a copy of
+     https://earmilk.com/feed/ (via the GitHub API), which triggers
+     .github/workflows/feed-from-shortcut.yml. An empty feed adds no posts. -->
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>EARMILK (placeholder)</title>
+    <link>https://earmilk.com</link>
+    <description>Waiting for the first upload from the Shortcut.</description>
+  </channel>
+</rss>
