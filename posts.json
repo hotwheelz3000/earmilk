@@ -1,6 +1,51 @@
 {
-  "updated": "Oct 30, 2026 03:01 AM PT",
+  "updated": "Oct 30, 2026 04:01 AM PT",
   "posts": [
+    {
+      "artist": "Emily Anderson",
+      "song": "In The Garden",
+      "genre": "Folk",
+      "date": "Oct 30",
+      "sort_date": "20261030",
+      "url": "https://earmilk.com/2026/10/30/emily-anderson-shares-reflective-new-single-in-the-garden/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/57/7e/a3/577ea393-1ab5-7f3a-cc09-4af4a579d571/712132179614_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Dream Robbery",
+      "song": "The Game",
+      "genre": "Alternative Rock",
+      "date": "Oct 30",
+      "sort_date": "20261030",
+      "url": "https://earmilk.com/2026/10/30/dream-robbery-reflect-on-love-and-life-on-the-game/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c7/db/07/c7db0766-e20b-30d0-98cd-1cf3886f826d/artwork.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Raeja",
+      "song": "Alchemy",
+      "genre": "Pop",
+      "date": "Oct 30",
+      "sort_date": "20261030",
+      "url": "https://earmilk.com/2026/10/30/with-alchemy-raeja-finds-connection-through-rhythm-language-and-heritage/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a1/b9/e8/a1b9e88e-ecc8-73ba-28cf-814e79cdc221/708208040599_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Raeja",
+      "song": "OMG (Ode to my Girls)",
+      "genre": "Pop",
+      "date": "Oct 30",
+      "sort_date": "20261030",
+      "url": "https://earmilk.com/2026/10/30/raeja-celebrates-strong-women-and-real-friendship-with-new-release-omg-ode-to-my-girls/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/47/28/b8/4728b839-ea1a-9fba-3ad6-733efd529943/824296866054_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "TATE SEDAR",
+      "song": "Take It All Back",
+      "genre": "Dance",
+      "date": "Oct 30",
+      "sort_date": "20261030",
+      "url": "https://earmilk.com/2026/10/30/tate-sedar-blends-electro-house-memories-and-hyperpop-energy-on-take-it-all-back/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f1/9b/4e/f19b4e81-9bdd-dd86-fa54-068db5056526/612891265248.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Jojo Gold",
       "song": "Parachutes",
