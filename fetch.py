@@ -22,32 +22,57 @@ def fetch_url(url, timeout=10):
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read().decode('utf-8')
 
+# Seconds to wait after each iTunes request. Apple allows roughly 20 searches a
+# minute; scripts/recheck_artwork.py raises this for its long run.
+ITUNES_DELAY = 0.3
+# Counts failed iTunes requests (network errors, rate limits), so callers can tell
+# "no match" apart from "couldn't ask".
+ITUNES_ERRORS = 0
+
+def artist_matches(post_artist, itunes_artist):
+    # True if any of the post's artist names (split on , & x feat. with) matches
+    # iTunes' artist, ignoring case and punctuation.
+    ia = _norm(itunes_artist)
+    if len(ia) < 2:
+        return False
+    names = re.split(r'\s*(?:,|&|\+|\band\b|\bx\b|\bfeat\.?|\bft\.?|\bwith\b)\s*',
+                     post_artist or '', flags=re.IGNORECASE)
+    for name in names:
+        n = _norm(name)
+        if len(n) >= 2 and (n in ia or ia in n):
+            return True
+    return False
+
 def itunes_lookup(artist, song):
-    # Returns (artwork_url, genre, itunes_artist, itunes_track) from the best match.
-    for q in [artist + ' ' + song, song + ' ' + artist, artist, song]:
+    # Returns (artwork_url, genre, itunes_artist, itunes_track).
+    # Artwork and genre only come from a result whose artist AND title both match
+    # the post, so a different song with a similar title (e.g. "The Way You Love Me"
+    # for "The Way You Love") or another song by the same artist is never used.
+    # A title-only match is still returned as names (no artwork/genre) so the
+    # artist auto-fix in add_post can use it.
+    global ITUNES_ERRORS
+    title_only = None
+    for q in [artist + ' ' + song, song + ' ' + artist]:
         if not q.strip():
             continue
         try:
-            url = 'https://itunes.apple.com/search?term=' + urllib.parse.quote(q.strip()) + '&media=music&limit=5&entity=song'
+            url = 'https://itunes.apple.com/search?term=' + urllib.parse.quote(q.strip()) + '&media=music&limit=10&entity=song'
             data = json.loads(fetch_url(url))
-            results = data.get('results', [])
-            chosen = None
-            for r in results:
-                if artist and artist.lower() in r.get('artistName', '').lower():
-                    chosen = r
-                    break
-            if chosen is None and results:
-                chosen = results[0]
-            if chosen:
-                art = chosen.get('artworkUrl100', '').replace('100x100bb', '400x400bb')
-                genre = chosen.get('primaryGenreName', '')
-                iartist = chosen.get('artistName', '')
-                itrack = chosen.get('trackName', '')
-                if art or genre:
-                    return art, genre, iartist, itrack
+            for r in data.get('results', []):
+                if not titles_match(r.get('trackName', ''), song):
+                    continue
+                if artist_matches(artist, r.get('artistName', '')):
+                    art = r.get('artworkUrl100', '').replace('100x100bb', '400x400bb')
+                    time.sleep(ITUNES_DELAY)
+                    return art, r.get('primaryGenreName', ''), r.get('artistName', ''), r.get('trackName', '')
+                if title_only is None:
+                    title_only = r
         except Exception as e:
+            ITUNES_ERRORS += 1
             print('iTunes error: ' + str(e))
-        time.sleep(0.3)
+        time.sleep(ITUNES_DELAY)
+    if title_only is not None:
+        return '', '', title_only.get('artistName', ''), title_only.get('trackName', '')
     return '', '', '', ''
 
 def artwork_from_musicbrainz(artist, song):
@@ -416,6 +441,8 @@ def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, dat
             print('  AUTO-FIX: artist ' + repr(artist) + ' -> ' + repr(candidate) + ' (iTunes)')
             artist = candidate
             genre = clean_genre(genre, artist, song)
+            # The first lookup only gave names; get artwork/genre for the corrected artist.
+            artwork, itunes_genre, _, _ = fetch_meta(artist, song)
     # Earmilk had no real genre tag -> fall back to iTunes' genre
     if not genre and itunes_genre:
         genre = clean_genre(itunes_genre, artist, song)
@@ -545,7 +572,8 @@ def load_posts():
     print('Loaded ' + str(len(existing_posts)) + ' existing posts')
 
     for p in existing_posts:
-        if not p.get('artwork') and p.get('artist') and p.get('song'):
+        # no_artwork: scripts/recheck_artwork.py found no matching cover; don't retry every run.
+        if not p.get('artwork') and not p.get('no_artwork') and p.get('artist') and p.get('song'):
             print('fetching artwork: ' + p['artist'] + ' - ' + p['song'])
             p['artwork'] = fetch_artwork(p['artist'], p['song'])
         if not p.get('sort_date'):
