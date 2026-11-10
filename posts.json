@@ -1,6 +1,15 @@
 {
-  "updated": "Nov 10, 2026 04:02 AM PT",
+  "updated": "Nov 10, 2026 05:02 AM PT",
   "posts": [
+    {
+      "artist": "Amy Jones",
+      "song": "Next To Me",
+      "genre": "Pop",
+      "date": "Nov 10",
+      "sort_date": "20261110",
+      "url": "https://earmilk.com/2026/11/10/amy-jones-returns-with-infectious-and-groove-rich-new-single-next-to-me/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cd/1e/9a/cd1e9a13-fb24-bc35-8e53-9e8c5fd1b597/s03.jpg/400x400bb.jpg"
+    },
     {
       "artist": "IMBER",
       "song": "Otherside",
