@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""One-time cleanup: recheck every post's cover art with the stricter matching.
+"""Recheck posts' cover art with the strict matching and all artwork sources.
+
+    python3 scripts/recheck_artwork.py            # every post
+    python3 scripts/recheck_artwork.py --missing  # only posts with no cover
 
 Older runs of fetch.py could give a post another song's cover (it took the first
 iTunes result when the artist didn't match). This looks every post up again with
 the new rule (artist AND title must match):
 
-  - match found on iTunes or MusicBrainz -> that cover
+  - match found on iTunes, Deezer or MusicBrainz -> that cover
+  - otherwise the Earmilk article's own image
   - nothing matches                       -> no cover (marked no_artwork so the
                                              hourly job doesn't keep retrying)
   - the lookup failed (network/rate limit) -> post left as it is
@@ -16,7 +20,7 @@ can run it again and it carries on. posts.json is only changed at the end, then
 scripts/update_feed.sh commits and pushes it like the hourly job does.
 
 Run on the iMac:
-    cd ~/earmilk && git pull && caffeinate -i python3 scripts/recheck_artwork.py
+    cd ~/earmilk && git pull && caffeinate -i python3 scripts/recheck_artwork.py --missing
 """
 import json
 import os
@@ -53,20 +57,20 @@ def main():
     with open('posts.json') as f:
         posts = json.load(f).get('posts', [])
     progress = load_progress()  # url -> {"artwork": "..."} for posts already checked
+    missing_only = '--missing' in sys.argv[1:]
     todo = [p for p in posts if p.get('url') and p['url'] not in progress
-            and p.get('artist') and p.get('song')]
+            and p.get('artist') and p.get('song')
+            and (not missing_only or not p.get('artwork'))]
     print(f'{len(posts)} posts, {len(progress)} already checked, {len(todo)} to go')
 
     for i, p in enumerate(todo, 1):
         errors_before = fetch.ITUNES_ERRORS
-        art, _, _, _ = fetch.itunes_lookup(p['artist'], p['song'])
-        if fetch.ITUNES_ERRORS > errors_before:
+        art = fetch.fetch_artwork(p['artist'], p['song'], p['url'])
+        if not art and fetch.ITUNES_ERRORS > errors_before:
             # Couldn't ask Apple (often a rate limit): wait, and leave this post for a later run.
             print(f'[{i}/{len(todo)}] lookup failed, skipping for now: {p["artist"]} - {p["song"]}')
             time.sleep(60)
             continue
-        if not art:
-            art = fetch.artwork_from_musicbrainz(p['artist'], p['song'])
         old = p.get('artwork', '')
         status = 'same' if art == old else ('NEW COVER' if art else 'REMOVED (no match)')
         print(f'[{i}/{len(todo)}] {status}: {p["artist"]} - {p["song"]}')
@@ -96,7 +100,8 @@ def main():
     fetch.write_posts(current)
 
     left = sum(1 for p in current if p.get('url') and p['url'] not in progress
-               and p.get('artist') and p.get('song'))
+               and p.get('artist') and p.get('song')
+               and (not missing_only or not p.get('artwork')))
     print(f'Done: {changed} posts changed. {left} still unchecked'
           + (' (run this again to finish them).' if left else '.'))
 

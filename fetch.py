@@ -25,8 +25,8 @@ def fetch_url(url, timeout=10):
 # Seconds to wait after each iTunes request. Apple allows roughly 20 searches a
 # minute; scripts/recheck_artwork.py raises this for its long run.
 ITUNES_DELAY = 0.3
-# Counts failed iTunes requests (network errors, rate limits), so callers can tell
-# "no match" apart from "couldn't ask".
+# Counts failed lookups (iTunes, Deezer, Earmilk article; network errors, rate
+# limits), so callers can tell "no match" apart from "couldn't ask".
 ITUNES_ERRORS = 0
 
 def artist_matches(post_artist, itunes_artist):
@@ -99,15 +99,60 @@ def artwork_from_musicbrainz(artist, song):
     time.sleep(0.5)
     return ''
 
-def fetch_meta(artist, song):
-    # One iTunes call gives artwork, a fallback genre, and canonical names.
+def deezer_lookup(artist, song):
+    # Album cover from Deezer's free public search API (no key needed). Same rule
+    # as iTunes: the artist AND the title must both match. Often has new indie
+    # releases that iTunes doesn't.
+    global ITUNES_ERRORS
+    for q in ['artist:"' + artist + '" track:"' + song + '"', artist + ' ' + song]:
+        try:
+            url = 'https://api.deezer.com/search?q=' + urllib.parse.quote(q) + '&limit=10'
+            data = json.loads(fetch_url(url))
+            for r in data.get('data', []):
+                if titles_match(r.get('title', ''), song) and \
+                        artist_matches(artist, (r.get('artist') or {}).get('name', '')):
+                    album = r.get('album') or {}
+                    cover = album.get('cover_big') or album.get('cover_medium') or ''
+                    if cover:
+                        return cover
+        except Exception as e:
+            ITUNES_ERRORS += 1
+            print('Deezer error: ' + str(e))
+        time.sleep(0.3)
+    return ''
+
+def article_image(url):
+    # Last resort: the Earmilk article's own featured image (its og:image), so a
+    # post never ends up with no picture. Usually an artist photo, not the cover.
+    global ITUNES_ERRORS
+    if not url:
+        return ''
+    try:
+        page = fetch_url(url, timeout=15)
+        for pattern in (r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',
+                        r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']'):
+            m = re.search(pattern, page)
+            if m:
+                return html.unescape(m.group(1)).strip()
+    except Exception as e:
+        ITUNES_ERRORS += 1
+        print('Article image error: ' + str(e))
+    return ''
+
+def fetch_meta(artist, song, url=''):
+    # Artwork, in order: iTunes, Deezer, MusicBrainz, then the Earmilk article's image.
+    # One iTunes call also gives a fallback genre and canonical names.
     art, genre, iartist, itrack = itunes_lookup(artist, song)
     if not art and artist and song:
+        art = deezer_lookup(artist, song)
+    if not art and artist and song:
         art = artwork_from_musicbrainz(artist, song)
+    if not art:
+        art = article_image(url)
     return art, genre, iartist, itrack
 
-def fetch_artwork(artist, song):
-    return fetch_meta(artist, song)[0]
+def fetch_artwork(artist, song, url=''):
+    return fetch_meta(artist, song, url)[0]
 
 def _norm(s):
     return re.sub(r'[^a-z0-9]', '', (s or '').lower())
@@ -432,7 +477,7 @@ def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, dat
     if not artist or not song:
         print('  SKIPPED (no artist/song): ' + url)
         return False
-    artwork, itunes_genre, itunes_artist, itunes_track = fetch_meta(artist, song)
+    artwork, itunes_genre, itunes_artist, itunes_track = fetch_meta(artist, song, url)
     # Auto-fix: if the parsed artist looks mis-parsed and iTunes found the same
     # track, trust iTunes' canonical artist name (gated on a song-title match).
     if flag_suspicious(artist, song, genre) and itunes_artist and titles_match(itunes_track, song):
@@ -442,7 +487,7 @@ def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, dat
             artist = candidate
             genre = clean_genre(genre, artist, song)
             # The first lookup only gave names; get artwork/genre for the corrected artist.
-            artwork, itunes_genre, _, _ = fetch_meta(artist, song)
+            artwork, itunes_genre, _, _ = fetch_meta(artist, song, url)
     # Earmilk had no real genre tag -> fall back to iTunes' genre
     if not genre and itunes_genre:
         genre = clean_genre(itunes_genre, artist, song)
@@ -575,7 +620,7 @@ def load_posts():
         # no_artwork: scripts/recheck_artwork.py found no matching cover; don't retry every run.
         if not p.get('artwork') and not p.get('no_artwork') and p.get('artist') and p.get('song'):
             print('fetching artwork: ' + p['artist'] + ' - ' + p['song'])
-            p['artwork'] = fetch_artwork(p['artist'], p['song'])
+            p['artwork'] = fetch_artwork(p['artist'], p['song'], p.get('url', ''))
         if not p.get('sort_date'):
             p['sort_date'] = display_to_sort(p.get('date', 'Jan 1'))
     return existing_posts, url_to_post, song_to_post
