@@ -352,6 +352,8 @@ def _leading_name(text):
 
 def clean_artist(artist, song=''):
     a = (artist or '').strip()
+    # Earmilk tags like "[Premiere] Virak" or "[Music Video] Modern Oli"
+    a = re.sub(r'^(?:\[[^\]]*\]\s*)+', '', a).strip()
     # If the whole sentence got captured, cut it at the first action verb
     m = re.match(r'^(.+?)\s+(?:' + VERBS + r')\b', a, re.IGNORECASE)
     if m:
@@ -480,9 +482,12 @@ def add_post(existing_posts, url_to_post, song_to_post, artist, song, genre, dat
     artwork, itunes_genre, itunes_artist, itunes_track = fetch_meta(artist, song, url)
     # Auto-fix: if the parsed artist looks mis-parsed and iTunes found the same
     # track, trust iTunes' canonical artist name (gated on a song-title match).
+    # The candidate must also appear in the article's URL, so a different artist's
+    # song with the same title (e.g. "Linus Alberg" for The Bergamot's "Tides") is never used.
     if flag_suspicious(artist, song, genre) and itunes_artist and titles_match(itunes_track, song):
         candidate = clean_artist(itunes_artist, song)
-        if candidate and not flag_suspicious(candidate, song, genre):
+        slug = _norm(url.rstrip('/').rsplit('/', 1)[-1])
+        if candidate and not flag_suspicious(candidate, song, genre) and _norm(candidate) in slug:
             print('  AUTO-FIX: artist ' + repr(artist) + ' -> ' + repr(candidate) + ' (iTunes)')
             artist = candidate
             genre = clean_genre(genre, artist, song)
