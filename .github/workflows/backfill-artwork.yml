@@ -1,0 +1,60 @@
+name: Backfill Missing Artwork
+
+# One-off (run by hand from the Actions tab): looks up covers for posts that
+# have none on iTunes, Deezer and MusicBrainz, and pushes posts.json.
+# earmilk.com blocks GitHub's servers, so the article-image fallback is skipped
+# here (--no-article); the iOS app loads article images itself.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: feed-from-shortcut
+  cancel-in-progress: false
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      TZ: America/Los_Angeles
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      MERGE_DRIVER: "merge.posts-union.driver=python3 scripts/merge_posts.py %O %A %B"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Look up missing covers
+        run: python scripts/recheck_artwork.py --missing --no-article --no-push
+
+      - name: Commit and push posts.json
+        run: |
+          if git diff --quiet -- posts.json; then
+            echo "No covers found; nothing to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add posts.json
+          git commit -q -m "chore: backfill missing artwork $(date +'%Y-%m-%d %H:%M %Z')"
+          for attempt in 1 2 3 4 5; do
+            if git -c "$MERGE_DRIVER" pull -q --rebase origin main && git push -q origin HEAD:main; then
+              echo "Pushed posts.json"
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            echo "::warning::push attempt $attempt failed; retrying"
+            sleep $((attempt * 10))
+          done
+          echo "::error::could not push posts.json after 5 attempts"
+          exit 1

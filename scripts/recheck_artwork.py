@@ -4,6 +4,11 @@
     python3 scripts/recheck_artwork.py            # every post
     python3 scripts/recheck_artwork.py --missing  # only posts with no cover
 
+    --no-article  skip the Earmilk article image (earmilk.com blocks GitHub's
+                  servers); posts with no catalog match are left unchanged
+    --no-push     don't run scripts/update_feed.sh; the caller commits posts.json
+                  (used by .github/workflows/backfill-artwork.yml)
+
 Older runs of fetch.py could give a post another song's cover (it took the first
 iTunes result when the artist didn't match). This looks every post up again with
 the new rule (artist AND title must match):
@@ -57,7 +62,12 @@ def main():
     with open('posts.json') as f:
         posts = json.load(f).get('posts', [])
     progress = load_progress()  # url -> {"artwork": "..."} for posts already checked
-    missing_only = '--missing' in sys.argv[1:]
+    args = sys.argv[1:]
+    missing_only = '--missing' in args
+    no_article = '--no-article' in args
+    no_push = '--no-push' in args
+    if no_article:
+        fetch.article_image = lambda url: ''
     todo = [p for p in posts if p.get('url') and p['url'] not in progress
             and p.get('artist') and p.get('song')
             and (not missing_only or not p.get('artwork'))]
@@ -70,6 +80,10 @@ def main():
             # Couldn't ask Apple (often a rate limit): wait, and leave this post for a later run.
             print(f'[{i}/{len(todo)}] lookup failed, skipping for now: {p["artist"]} - {p["song"]}')
             time.sleep(60)
+            continue
+        if not art and no_article:
+            # Only the article image could help; leave this post for the app/Mac job.
+            print(f'[{i}/{len(todo)}] no catalog match, unchanged: {p["artist"]} - {p["song"]}')
             continue
         old = p.get('artwork', '')
         status = 'same' if art == old else ('NEW COVER' if art else 'REMOVED (no match)')
@@ -105,6 +119,10 @@ def main():
     print(f'Done: {changed} posts changed. {left} still unchecked'
           + (' (run this again to finish them).' if left else '.'))
 
+    if no_push:
+        if os.path.exists(PROGRESS):
+            os.remove(PROGRESS)
+        return
     print('Committing and pushing posts.json with scripts/update_feed.sh...')
     result = subprocess.run(['bash', 'scripts/update_feed.sh'])
     if result.returncode == 0 and not left:
