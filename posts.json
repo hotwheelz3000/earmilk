@@ -1,6 +1,78 @@
 {
-  "updated": "Nov 13, 2026 08:02 AM PT",
+  "updated": "Nov 13, 2026 09:01 AM PT",
   "posts": [
+    {
+      "artist": "Strange DNA",
+      "song": "Reanimate",
+      "genre": "Alt-Pop",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/strange-dna-explores-identity-prejudice-and-personal-renewal-on-reanimate/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/fe/45/94/fe45945f-f295-1b6a-030f-2c1586350bf6/artwork.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Stage Door Guy",
+      "song": "Keep It in the Family",
+      "genre": "Blues",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/stage-door-guy-explores-family-secrets-and-broken-dreams-on-new-ep-keep-it-in-the-family/",
+      "artwork": "https://earmilk.com/wp-content/uploads/2026/11/a109.jpg"
+    },
+    {
+      "artist": "C.J. Coyne",
+      "song": "Smoke Drifting",
+      "genre": "Alt-Pop",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/c-j-coyne-turns-lingering-memories-into-sound-on-new-single-smoke-drifting/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f3/00/6d/f3006d33-f730-9295-4598-879570995f5a/artwork.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Monster's Halloween Party",
+      "song": "There Was a Ghost Who Had No Friends",
+      "genre": "Jazz",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/monsters-halloween-party-turns-loneliness-into-a-musical-celebration-of-friendship-with-there-was-a-ghost-who-had-no-friends/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a4/87/0d/a4870d69-1062-b5f5-b8e2-c6aa677b5598/859750044280_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "KATIA POJIDAEVA",
+      "song": "Pretty Little Shadows",
+      "genre": "Alternative Rock",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/with-pretty-little-shadows-katia-pojidaeva-embraces-darkness-freedom-and-female-awakening/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a6/4b/3d/a64b3dd3-68e8-6462-9de4-5a1fbfbc34af/artwork.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "Circus Mind",
+      "song": "Died Too Young",
+      "genre": "Funk",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/circus-mind-turns-lifes-unfinished-business-into-a-powerful-musical-reflection-on-died-too-young/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3a/13/e9/3a13e95b-6234-5397-9846-b02618f9ae27/708208134786_cover.jpg/400x400bb.jpg"
+    },
+    {
+      "artist": "JES",
+      "song": "Dreamer",
+      "genre": "Pop",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/jes-explores-the-power-of-dreams-love-and-self-discovery-on-new-album-dreamer/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c9/b1/b1/c9b1b18d-b54a-4608-1283-1a972c2e6909/8718525412612.png/400x400bb.jpg"
+    },
+    {
+      "artist": "Margot White",
+      "song": "Cruelest Pill",
+      "genre": "Alt-Pop",
+      "date": "Nov 13",
+      "sort_date": "20261113",
+      "url": "https://earmilk.com/2026/11/13/margot-white-explores-the-beauty-of-disillusionment-on-new-single-cruelest-pill/",
+      "artwork": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/96/53/b5/9653b5b7-01ad-4149-1e4b-2ac028906207/711641013686.jpg/400x400bb.jpg"
+    },
     {
       "artist": "Kyle Reinhart",
       "song": "VERTIGO",
